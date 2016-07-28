@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <name>rpi</name>
+  <version>0.0.1</version>
+  <description>The rpi package</description>
+
+  <maintainer email="cto@lxrobotics.com">Alexander Entinger</maintainer>
+
+  <license>Alexander Entinger / LXRobotics</license>
+
+  <url type="website">https://github.com/lxrobotics/rpi</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+
+  <run_depend>roscpp</run_depend>
+
+  <export>
+  </export>
+</package>
