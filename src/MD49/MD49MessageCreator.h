@@ -14,7 +14,7 @@
 
 #include <vector>
 
-#include "MD49CommandId.h"
+#include "../MD49/MD49CommandId.h"
 
 /**************************************************************************************
  * TYPEDEFS

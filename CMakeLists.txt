@@ -92,8 +92,8 @@ include_directories(
 # add_dependencies(rpi ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 add_executable(md49_node 
-  src/md49/main.cpp
-  src/md49/MD49MessageCreator.cpp
+  src/MD49/main.cpp
+  src/MD49/MD49MessageCreator.cpp
 )
 
 target_link_libraries(md49_node
