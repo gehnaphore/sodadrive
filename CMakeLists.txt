@@ -95,6 +95,7 @@ include_directories(
 
 add_executable(md49_node 
   src/MD49/main.cpp
+  src/MD49/MD49.cpp
   src/MD49/MD49Message.cpp
   src/MD49/MD49MessageCreator.cpp
   src/MD49/Serial.cpp

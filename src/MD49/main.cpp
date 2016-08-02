@@ -11,6 +11,7 @@
 
 #include <ros/ros.h>
 
+#include "MD49.h"
 #include "Serial.h"
 
 /**************************************************************************************
@@ -35,6 +36,7 @@ int main(int argc, char **argv)
 
   ros::NodeHandle node_handle;
   Serial          serial      ("/dev/ttyUSB0", MD49_BAUD_RATE);
+  MD49            md49        (serial);
 
   /* Loop forever */
 
