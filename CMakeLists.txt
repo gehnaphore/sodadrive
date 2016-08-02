@@ -5,7 +5,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
 )
 
-# find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS 
+  system
+)
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -93,7 +95,9 @@ include_directories(
 
 add_executable(md49_node 
   src/MD49/main.cpp
+  src/MD49/MD49Message.cpp
   src/MD49/MD49MessageCreator.cpp
+  src/MD49/Serial.cpp
 )
 
 target_link_libraries(md49_node

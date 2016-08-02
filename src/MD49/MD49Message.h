@@ -3,42 +3,28 @@
  * \copyright LXRobotics GmbH
  */
 
+#ifndef RPI_SRC_MD49_MD49MESSAGE_H_
+#define RPI_SRC_MD49_MD49MESSAGE_H_
+
 /**************************************************************************************
  * INCLUDES
  **************************************************************************************/
 
-#include <stdlib.h>
+#include <stdint.h>
 
-#include <ros/ros.h>
-
-#include "Serial.h"
-
-/**************************************************************************************
- * GLOBAL CONSTANTS
- **************************************************************************************/
-
-static size_t const MD49_BAUD_RATE = 38400;
+#include <vector>
+#include <iostream>
 
 /**************************************************************************************
- * PROTOTYPES
+ * TYPEDEFS
  **************************************************************************************/
+
+typedef std::vector<uint8_t> MD49Message;
 
 /**************************************************************************************
- * MAIN
+ * PUBLIC PROTOTYPES
  **************************************************************************************/
 
-int main(int argc, char **argv)
-{
-  ros::init(argc, argv, "md49_node");
+std::ostream & operator << (std::ostream &os, MD49Message const &msg);
 
-  /* Instantiate all classes */
-
-  ros::NodeHandle node_handle;
-  Serial          serial      ("/dev/ttyUSB0", MD49_BAUD_RATE);
-
-  /* Loop forever */
-
-  ros::spin();
-
-  return EXIT_SUCCESS;
-}
+#endif /* RPI_SRC_MD49_MD49MESSAGE_H_ */
