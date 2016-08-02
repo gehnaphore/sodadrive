@@ -36,7 +36,7 @@ public:
     SET_ACCELERATION  = 0x33,
     SET_MODE          = 0x34,
 
-    RESET_ENCODER     = 0x35,
+    RESET_ENCODERS    = 0x35,
     DISABLE_REGULATOR = 0x36,
     ENABLE_REGULATOR  = 0x37,
     DISABLE_TIMEOUT   = 0x38,

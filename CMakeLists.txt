@@ -91,17 +91,18 @@ include_directories(
 ## either from message generation or dynamic reconfigure
 # add_dependencies(rpi ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-## Declare a C++ executable
-# add_executable(rpi_node src/rpi_node.cpp)
+add_executable(md49_node 
+  src/md49/main.cpp
+  src/md49/MD49MessageCreator.cpp
+)
+
+target_link_libraries(md49_node
+  ${catkin_LIBRARIES}
+)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(rpi_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-## Specify libraries to link a library or executable target against
-# target_link_libraries(rpi_node
-#   ${catkin_LIBRARIES}
-# )
 
 #############
 ## Install ##
