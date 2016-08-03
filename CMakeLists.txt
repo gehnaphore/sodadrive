@@ -3,6 +3,7 @@ project(rpi)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  std_msgs
 )
 
 find_package(Boost REQUIRED COMPONENTS 
@@ -88,11 +89,6 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(rpi ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
 add_executable(md49_node 
   src/MD49/EMG49.cpp
   src/MD49/main.cpp
@@ -108,9 +104,13 @@ target_link_libraries(md49_node
   ${catkin_LIBRARIES}
 )
 
-## Add cmake target dependencies of the executable
-## same as for the library above
-# add_dependencies(rpi_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_executable(md49_test 
+  src/MD49_test/main.cpp
+)
+
+target_link_libraries(md49_test
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##
