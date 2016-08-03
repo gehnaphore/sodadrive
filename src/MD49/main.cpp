@@ -18,7 +18,8 @@
  * GLOBAL CONSTANTS
  **************************************************************************************/
 
-static size_t const MD49_BAUD_RATE = 38400;
+static size_t const MD49_BAUD_RATE        = 38400;
+static double const RD03_WHEEL_DIAMETER_m = 0.125;
 
 /**************************************************************************************
  * PROTOTYPES
