@@ -69,8 +69,8 @@ int main(int argc, char **argv)
 
     getDeltaEncoderValues(md49, delta_encoder_1, delta_encoder_2);
 
-    double const actual_speed_1_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_1, WHEEL_DIAMETER_m);
-    double const actual_speed_2_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_2, WHEEL_DIAMETER_m);
+    double const actual_speed_1_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_1, WHEEL_DIAMETER_m) / T_LOOP_UPDATE_s;
+    double const actual_speed_2_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_2, WHEEL_DIAMETER_m) / T_LOOP_UPDATE_s;
 
     md49_regulator.updateWithActualValue(actual_speed_1_m_per_s, actual_speed_2_m_per_s);
 
