@@ -52,8 +52,11 @@ int main(int argc, char **argv)
 
   /* Setup subscribers */
 
-  ros::Subscriber speed_1_subscriber = node_handle.subscribe<std_msgs::Float64>("/md49/speed_1", 10, boost::bind(&speed_1_callback, _1, md49_regulator));
-  ros::Subscriber speed_2_subscriber = node_handle.subscribe<std_msgs::Float64>("/md49/speed_2", 10, boost::bind(&speed_2_callback, _1, md49_regulator));
+  ros::Subscriber speed_1_subscriber       = node_handle.subscribe<std_msgs::Float64>("/md49/speed_1",        10, boost::bind(&speed_1_callback, _1, md49_regulator));
+  ros::Subscriber speed_2_subscriber       = node_handle.subscribe<std_msgs::Float64>("/md49/speed_2",        10, boost::bind(&speed_2_callback, _1, md49_regulator));
+
+  ros::Publisher  actual_speed_1_publisher = node_handle.advertise<std_msgs::Float64>("/md49/actual_speed_1", 10);
+  ros::Publisher  actual_speed_2_publisher = node_handle.advertise<std_msgs::Float64>("/md49/actual_speed_2", 10);
 
   /* Run the control loop */
 
@@ -61,8 +64,6 @@ int main(int argc, char **argv)
 
   while(ros::ok())
   {
-    ros::spinOnce();
-
     uint32_t delta_encoder_1 = 0,
              delta_encoder_2 = 0;
 
@@ -78,6 +79,14 @@ int main(int argc, char **argv)
 
     md49.setSpeed1(speed_1);
     md49.setSpeed2(speed_2);
+
+    std_msgs::Float64 actual_speed_1_msg; actual_speed_1_msg.data = actual_speed_1_m_per_s;
+    std_msgs::Float64 actual_speed_2_msg; actual_speed_2_msg.data = actual_speed_2_m_per_s;
+
+    actual_speed_1_publisher.publish(actual_speed_1_msg);
+    actual_speed_2_publisher.publish(actual_speed_2_msg);
+
+    ros::spinOnce();
 
     loop_rate.sleep();
   }
