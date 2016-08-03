@@ -19,16 +19,15 @@ class PIRegulator
 
 public:
 
-  PIRegulator(double const kP, double const kI, double const dt_s, double const max, double const min);
+  PIRegulator(double const kP, double const kI, double const dt_s, double const min, double const max);
 
   double calc(double const target_value, double const actual_value);
 
 private:
 
-  double _kP, _kI, _dt_s, _max, _min,
+  double _kP, _kI, _dt_s, _min, _max,
          _integral;
 
 };
-
 
 #endif /* RPI_SRC_MD49_PIREGULATOR_H_ */
