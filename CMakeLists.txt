@@ -4,6 +4,7 @@ project(rpi)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  geometry_msgs
 )
 
 find_package(Boost REQUIRED COMPONENTS 
@@ -88,6 +89,15 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
+
+add_executable(drive_controller_node 
+  src/DriveController/main.cpp
+)
+
+target_link_libraries(drive_controller_node
+  ${catkin_LIBRARIES}
+)
+
 
 add_executable(md49_node 
   src/MD49/EMG49.cpp
