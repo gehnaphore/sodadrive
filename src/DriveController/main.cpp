@@ -17,6 +17,7 @@
 #include <std_msgs/Float64.h>
 #include <geometry_msgs/Twist.h>
 
+#include "Odometry.h"
 #include "DifferentialDriveController.h"
 
 /**************************************************************************************
@@ -36,6 +37,7 @@ typedef struct
  **************************************************************************************/
 
 static double const T_LOOP_UPDATE_s  = 0.2;   /* 200 ms */
+static double const WHEEL_DISTANCE_m = 0.5;   /* 0.5 m */
 
 /**************************************************************************************
  * GLOBAL VARIABLES
@@ -64,6 +66,7 @@ int main(int argc, char **argv)
   /* Instantiate the classes */
 
   DifferentialDriveController drive_controller(1.0, 1.0, 1.0, 1.0, T_LOOP_UPDATE_s);
+  Odometry                    odometry(WHEEL_DISTANCE_m);
 
   /* Setup the publishers */
 
@@ -88,6 +91,8 @@ int main(int argc, char **argv)
     drive_controller.setLinearX (drive_controller_input_data.linear_x_m_per_s_target_value);
     drive_controller.setAngularZ(drive_controller_input_data.angular_z_deg_per_s_target_value);
 
+    //double const linear_x_m_per_s_actual_value = odometry.calcAngularSpeed()
+
     drive_controller.updateWithActualValue(0.0, 0.0); /* TODO: Calc values from odometry */
 
     double const speed_1_m_per_s = drive_controller.getSpeed_1_m_per_s();
@@ -101,6 +106,7 @@ int main(int argc, char **argv)
     std_msgs::Float64 speed_2_msg; speed_2_msg.data = speed_2_m_per_s;
     speed_1_publisher.publish(speed_2_msg);
 
+    ros::spinOnce();
 
     loop_rate.sleep();
   }
