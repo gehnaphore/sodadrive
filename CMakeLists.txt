@@ -92,12 +92,13 @@ include_directories(
 
 add_executable(drive_controller_node 
   src/DriveController/main.cpp
+  src/DriveController/DifferentialDriveController.cpp
+  src/MD49/PIRegulator.cpp
 )
 
 target_link_libraries(drive_controller_node
   ${catkin_LIBRARIES}
 )
-
 
 add_executable(md49_node 
   src/MD49/EMG49.cpp
