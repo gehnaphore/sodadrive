@@ -52,6 +52,17 @@ static sDifferentialDriveControllerInputData drive_controller_input_data = { 0.0
 void actual_speed_1_callback(std_msgs::Float64::ConstPtr    const & msg);
 void actual_speed_2_callback(std_msgs::Float64::ConstPtr    const & msg);
 void cmd_vel_callback       (geometry_msgs::Twist::ConstPtr const & msg);
+void setTargetSpeed         (DifferentialDriveController          & drive_controller);
+void getActualSpeed         (Odometry                             & odometry,
+                             double                               & linear_x_m_per_s_actual_value,
+                             double                               & angular_speed_deg_per_s_actual_value);
+void getSpeedFromRegulator  (DifferentialDriveController    const & drive_controller,
+                             double                               & speed_1_m_per_s,
+                             double                               & speed_2_m_per_s);
+void publishSpeed           (ros::Publisher                       & speed_1_publisher,
+                             double                         const speed_1_m_per_s,
+                             ros::Publisher                       & speed_2_publisher,
+                             double                         const speed_2_m_per_s);
 
 /**************************************************************************************
  * MAIN
@@ -88,23 +99,32 @@ int main(int argc, char **argv)
   {
     ros::spinOnce();
 
-    drive_controller.setLinearX (drive_controller_input_data.linear_x_m_per_s_target_value);
-    drive_controller.setAngularZ(drive_controller_input_data.angular_z_deg_per_s_target_value);
+    setTargetSpeed        (drive_controller);
 
-    //double const linear_x_m_per_s_actual_value = odometry.calcAngularSpeed()
+    double linear_x_m_per_s_actual_value        = 0.0,
+           angular_speed_deg_per_s_actual_value = 0.0;
 
-    drive_controller.updateWithActualValue(0.0, 0.0); /* TODO: Calc values from odometry */
+    getActualSpeed        (odometry,
+                           linear_x_m_per_s_actual_value,
+                           angular_speed_deg_per_s_actual_value);
 
-    double const speed_1_m_per_s = drive_controller.getSpeed_1_m_per_s();
-    double const speed_2_m_per_s = drive_controller.getSpeed_2_m_per_s();
+    drive_controller.updateWithActualValue
+                          (linear_x_m_per_s_actual_value,
+                           angular_speed_deg_per_s_actual_value);
+
+    double speed_1_m_per_s = 0.0,
+           speed_2_m_per_s = 0.0;
+
+    getSpeedFromRegulator (drive_controller,
+                           speed_1_m_per_s,
+                           speed_2_m_per_s);
 
     /* TODO limit acceleration */
 
-    std_msgs::Float64 speed_1_msg; speed_1_msg.data = speed_1_m_per_s;
-    speed_1_publisher.publish(speed_1_msg);
-
-    std_msgs::Float64 speed_2_msg; speed_2_msg.data = speed_2_m_per_s;
-    speed_1_publisher.publish(speed_2_msg);
+    publishSpeed          (speed_1_publisher,
+                           speed_1_m_per_s,
+                           speed_2_publisher,
+                           speed_2_m_per_s);
 
     ros::spinOnce();
 
@@ -132,4 +152,33 @@ void cmd_vel_callback(geometry_msgs::Twist::ConstPtr const & msg)
 {
   drive_controller_input_data.linear_x_m_per_s_target_value     = msg->linear.x;
   drive_controller_input_data.angular_z_deg_per_s_target_value  = msg->angular.z;
+}
+
+void setTargetSpeed(DifferentialDriveController &drive_controller)
+{
+  drive_controller.setLinearX (drive_controller_input_data.linear_x_m_per_s_target_value);
+  drive_controller.setAngularZ(drive_controller_input_data.angular_z_deg_per_s_target_value);
+}
+
+void getActualSpeed(Odometry &odometry, double &linear_x_m_per_s_actual_value, double &angular_speed_deg_per_s_actual_value)
+{
+  linear_x_m_per_s_actual_value        = odometry.calcLinearSpeed (drive_controller_input_data.actual_speed_1_m_per_s, drive_controller_input_data.actual_speed_2_m_per_s);
+  angular_speed_deg_per_s_actual_value = odometry.calcAngularSpeed(drive_controller_input_data.actual_speed_1_m_per_s, drive_controller_input_data.actual_speed_2_m_per_s);
+}
+
+void getSpeedFromRegulator(DifferentialDriveController const &drive_controller, double &speed_1_m_per_s, double &speed_2_m_per_s)
+{
+  speed_1_m_per_s = drive_controller.getSpeed_1_m_per_s();
+  speed_2_m_per_s = drive_controller.getSpeed_2_m_per_s();
+}
+
+void publishSpeed(ros::Publisher &speed_1_publisher, double const speed_1_m_per_s, ros::Publisher &speed_2_publisher, double const speed_2_m_per_s)
+{
+  std_msgs::Float64 speed_1_msg;
+  speed_1_msg.data = speed_1_m_per_s;
+  speed_1_publisher.publish(speed_1_msg);
+
+  std_msgs::Float64 speed_2_msg;
+  speed_2_msg.data = speed_2_m_per_s;
+  speed_1_publisher.publish(speed_2_msg);
 }
