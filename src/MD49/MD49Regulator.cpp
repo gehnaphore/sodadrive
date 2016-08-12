@@ -10,6 +10,7 @@
 #include "MD49Regulator.h"
 
 #include <limits>
+#include <iostream>
 
 /**************************************************************************************
  * PUBLIC MEMBER FUNCTIONS
@@ -30,19 +31,31 @@ MD49Regulator::MD49Regulator(double const kP_1, double const kI_1,
 
 void MD49Regulator::setSpeed1TargetValue(double const speed_1_m_per_s)
 {
+  _mutex.lock();
+
   _speed_1_m_per_s_target_value = speed_1_m_per_s;
+
+  _mutex.unlock();
+
+  std::cout << "_speed_1_m_per_s_target_value = " << _speed_1_m_per_s_target_value << " m/s" << std::endl;
 }
 
 void MD49Regulator::setSpeed2TargetValue(double const speed_2_m_per_s)
 {
   _speed_2_m_per_s_target_value = speed_2_m_per_s;
+
+  std::cout << "_speed_2_m_per_s_target_value = " << _speed_2_m_per_s_target_value << " m/s" << std::endl;
 }
 
 void MD49Regulator::updateWithActualValue(double const speed_1_m_per_s,
                                           double const speed_2_m_per_s)
 {
+  _mutex.lock();
+
   _speed_1 = static_cast<int8_t>(_speed_1_regulator.calc(_speed_1_m_per_s_target_value, speed_1_m_per_s));
   _speed_2 = static_cast<int8_t>(_speed_2_regulator.calc(_speed_2_m_per_s_target_value, speed_2_m_per_s));
+
+  _mutex.unlock();
 }
 
 int8_t MD49Regulator::getSpeed1() const

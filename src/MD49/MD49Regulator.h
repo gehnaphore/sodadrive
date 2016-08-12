@@ -12,6 +12,8 @@
 
 #include <stdint.h>
 
+#include <boost/thread.hpp>
+
 #include "PIRegulator.h"
 
 /**************************************************************************************
@@ -38,14 +40,16 @@ public:
 
 private:
 
-  PIRegulator _speed_1_regulator,
-              _speed_2_regulator;
+  boost::mutex  _mutex;
 
-  double      _speed_1_m_per_s_target_value,
-              _speed_2_m_per_s_target_value;
+  PIRegulator   _speed_1_regulator,
+                _speed_2_regulator;
 
-  int8_t      _speed_1,
-              _speed_2;
+  double        _speed_1_m_per_s_target_value,
+                _speed_2_m_per_s_target_value;
+
+  int8_t        _speed_1,
+                _speed_2;
 
 };
 

@@ -9,6 +9,7 @@
 
 #include "PIRegulator.h"
 
+#include <iostream>
 #include <algorithm>
 
 /**************************************************************************************

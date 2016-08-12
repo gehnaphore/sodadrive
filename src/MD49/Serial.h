@@ -35,6 +35,8 @@ private:
   boost::asio::io_service   _io_service;
   boost::asio::serial_port  _serial_port;
 
+  size_t                    _tx_msg_cnt,
+                            _rx_msg_cnt;
 };
 
 #endif /* RPI_SRC_MD49_SERIAL_H_ */
