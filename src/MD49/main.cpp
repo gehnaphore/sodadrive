@@ -25,7 +25,7 @@
 
 static size_t const MD49_BAUD_RATE   = 38400;
 static double const WHEEL_DIAMETER_m = 0.125;
-static double const T_LOOP_UPDATE_s  = 0.1;   /* 100 ms */
+static double const T_LOOP_UPDATE_s  = 0.1;    /* 100 ms */
 
 /**************************************************************************************
  * PROTOTYPES
@@ -35,11 +35,11 @@ void speed_1_callback      (std_msgs::Float64::ConstPtr const & msg, MD49Regulat
 void speed_2_callback      (std_msgs::Float64::ConstPtr const & msg, MD49Regulator *md49_regulator );
 
 void getDeltaEncoderValues    (MD49          &      md49,
-                               uint32_t      &      delta_encoder_1,
-                               uint32_t      &      delta_encoder_2);
+                               int32_t       &      delta_encoder_1,
+                               int32_t       &      delta_encoder_2);
 
-void getActualSpeed_m_per_s   (uint32_t      const  delta_encoder_1,
-                               uint32_t      const  delta_encoder_2,
+void getActualSpeed_m_per_s   (int32_t       const  delta_encoder_1,
+                               int32_t       const  delta_encoder_2,
                                double        &      actual_speed_1_m_per_s,
                                double        &      actual_speed_2_m_per_s);
 
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
   ros::NodeHandle node_handle;
   Serial          serial        ("/dev/ttyUSB0", MD49_BAUD_RATE);
   MD49            md49          (serial);
-  MD49Regulator   md49_regulator(20.0, 1.0, 20.0, 1.0, T_LOOP_UPDATE_s);
+  MD49Regulator   md49_regulator(0.0, 200.0, 0.0, 200.0, T_LOOP_UPDATE_s);
 
   /* Setup subscribers */
 
@@ -87,8 +87,8 @@ int main(int argc, char **argv)
   {
     ros::spinOnce();
 
-    uint32_t delta_encoder_1 = 0,
-             delta_encoder_2 = 0;
+    int32_t delta_encoder_1 = 0,
+            delta_encoder_2 = 0;
 
     getDeltaEncoderValues    (md49,
                               delta_encoder_1,
@@ -101,7 +101,6 @@ int main(int argc, char **argv)
                               delta_encoder_2,
                               actual_speed_1_m_per_s,
                               actual_speed_2_m_per_s);
-
     md49_regulator.updateWithActualValue(actual_speed_1_m_per_s, actual_speed_2_m_per_s);
 
     int8_t speed_1 = 0,
@@ -134,7 +133,7 @@ int main(int argc, char **argv)
 
 void speed_1_callback(std_msgs::Float64::ConstPtr const & msg, MD49Regulator *md49_regulator)
 {
-  md49_regulator->setSpeed1TargetValue(msg->data * (-1.0)); /* The motor number 1 is the right motor is mounted the other way around then the left motor */
+  md49_regulator->setSpeed1TargetValue(msg->data);
 }
 
 void speed_2_callback(std_msgs::Float64::ConstPtr const & msg, MD49Regulator *md49_regulator)
@@ -142,24 +141,24 @@ void speed_2_callback(std_msgs::Float64::ConstPtr const & msg, MD49Regulator *md
   md49_regulator->setSpeed2TargetValue(msg->data);
 }
 
-void getDeltaEncoderValues(MD49 &md49, uint32_t &delta_encoder_1, uint32_t &delta_encoder_2)
+void getDeltaEncoderValues(MD49 &md49, int32_t &delta_encoder_1, int32_t &delta_encoder_2)
 {
-  static uint32_t prev_encoder_1    = 0;
-  static uint32_t prev_encoder_2    = 0;
+  static int32_t prev_encoder_1    = 0;
+  static int32_t prev_encoder_2    = 0;
 
-         uint32_t current_encoder_1 = 0,
-                  current_encoder_2 = 0;
+         int32_t current_encoder_1 = 0,
+                 current_encoder_2 = 0;
 
   md49.getEncoders(current_encoder_1, current_encoder_2);
 
   delta_encoder_1 = current_encoder_1 - prev_encoder_1;
   delta_encoder_2 = current_encoder_2 - prev_encoder_2;
 
-  current_encoder_1 = prev_encoder_1;
-  current_encoder_2 = prev_encoder_2;
+  prev_encoder_1  = current_encoder_1;
+  prev_encoder_2  = current_encoder_2;
 }
 
-void getActualSpeed_m_per_s(uint32_t const delta_encoder_1, uint32_t const delta_encoder_2,
+void getActualSpeed_m_per_s(int32_t const delta_encoder_1, int32_t const delta_encoder_2,
                             double &actual_speed_1_m_per_s, double &actual_speed_2_m_per_s)
 {
   actual_speed_1_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_1, WHEEL_DIAMETER_m) / T_LOOP_UPDATE_s;

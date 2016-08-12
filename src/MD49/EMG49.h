@@ -21,7 +21,7 @@ class EMG49
 
 public:
 
-  static double calcDistanceTraveled_m(uint32_t const delta_encoder_ticks, double const wheel_diameter_m);
+  static double calcDistanceTraveled_m(int32_t const delta_encoder_ticks, double const wheel_diameter_m);
 
 private:
 

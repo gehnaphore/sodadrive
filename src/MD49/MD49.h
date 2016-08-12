@@ -25,7 +25,7 @@ public:
 
   void setSpeed1  (int8_t const speed_1);
   void setSpeed2  (int8_t const speed_2);
-  void getEncoders(uint32_t &encoder_1, uint32_t &encoder_2);
+  void getEncoders(int32_t &encoder_1, int32_t &encoder_2);
 
 private:
 

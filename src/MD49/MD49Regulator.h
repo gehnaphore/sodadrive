@@ -12,8 +12,6 @@
 
 #include <stdint.h>
 
-#include <boost/thread.hpp>
-
 #include "PIRegulator.h"
 
 /**************************************************************************************
@@ -39,8 +37,6 @@ public:
   int8_t  getSpeed2            (                            ) const;
 
 private:
-
-  boost::mutex  _mutex;
 
   PIRegulator   _speed_1_regulator,
                 _speed_2_regulator;
