@@ -1,0 +1,3 @@
+<launch>  
+    <node pkg="rpi" type="md49_node" name="md49_node" output="screen"/>
+</launch>   

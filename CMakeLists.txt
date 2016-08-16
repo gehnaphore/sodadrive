@@ -101,6 +101,14 @@ target_link_libraries(drive_controller_node
   ${catkin_LIBRARIES}
 )
 
+add_executable(drive_controller_test 
+  src/DriveController_test/main.cpp
+)
+
+target_link_libraries(drive_controller_test
+  ${catkin_LIBRARIES}
+)
+
 add_executable(md49_node 
   src/MD49/EMG49.cpp
   src/MD49/main.cpp

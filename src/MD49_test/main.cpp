@@ -29,7 +29,7 @@ void handleInvalidValue();
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "MD49_test");
+  ros::init(argc, argv, "md49_test");
 
   ros::NodeHandle node_handle;
 
@@ -90,7 +90,7 @@ void handleSetSpeed2(ros::Publisher &speed_2_publisher)
 
 void handleExit()
 {
-  std::cout << "Exiting function MD49_test" << std::endl;
+  std::cout << "Exiting node md49_test" << std::endl;
 }
 
 void handleInvalidValue()

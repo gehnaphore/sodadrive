@@ -52,7 +52,7 @@ static sDifferentialDriveControllerInputData drive_controller_input_data = { 0.0
 void actual_speed_1_callback(std_msgs::Float64::ConstPtr    const & msg);
 void actual_speed_2_callback(std_msgs::Float64::ConstPtr    const & msg);
 void cmd_vel_callback       (geometry_msgs::Twist::ConstPtr const & msg);
-void setTargetSpeed         (DifferentialDriveController          & drive_controller);
+void setTargetSpeed         (DifferentialDriveController          * drive_controller);
 void getActualSpeed         (Odometry                             & odometry,
                              double                               & linear_x_m_per_s_actual_value,
                              double                               & angular_speed_deg_per_s_actual_value);
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
   {
     ros::spinOnce();
 
-    setTargetSpeed        (drive_controller);
+    setTargetSpeed        (&drive_controller);
 
     double linear_x_m_per_s_actual_value        = 0.0,
            angular_speed_deg_per_s_actual_value = 0.0;
@@ -154,10 +154,10 @@ void cmd_vel_callback(geometry_msgs::Twist::ConstPtr const & msg)
   drive_controller_input_data.angular_z_deg_per_s_target_value  = msg->angular.z;
 }
 
-void setTargetSpeed(DifferentialDriveController &drive_controller)
+void setTargetSpeed(DifferentialDriveController *drive_controller)
 {
-  drive_controller.setLinearX (drive_controller_input_data.linear_x_m_per_s_target_value);
-  drive_controller.setAngularZ(drive_controller_input_data.angular_z_deg_per_s_target_value);
+  drive_controller->setLinearX (drive_controller_input_data.linear_x_m_per_s_target_value);
+  drive_controller->setAngularZ(drive_controller_input_data.angular_z_deg_per_s_target_value);
 }
 
 void getActualSpeed(Odometry &odometry, double &linear_x_m_per_s_actual_value, double &angular_speed_deg_per_s_actual_value)

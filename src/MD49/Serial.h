@@ -24,7 +24,7 @@ class Serial
 {
 public:
 
-  Serial  (std::string const &dev_node, size_t const baud_rate);
+  Serial  (std::string const &dev_node, size_t const baud_rate, bool const show_debug_out);
   ~Serial ();
 
   void        write (MD49Message  const &msg      );
@@ -34,6 +34,8 @@ private:
 
   boost::asio::io_service   _io_service;
   boost::asio::serial_port  _serial_port;
+
+  bool                      _show_debug_out;
 
   size_t                    _tx_msg_cnt,
                             _rx_msg_cnt;

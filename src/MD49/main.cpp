@@ -67,7 +67,7 @@ int main(int argc, char **argv)
   /* Instantiate all classes */
 
   ros::NodeHandle node_handle;
-  Serial          serial        ("/dev/ttyUSB0", MD49_BAUD_RATE);
+  Serial          serial        ("/dev/ttyUSB0", MD49_BAUD_RATE, true);
   MD49            md49          (serial);
   MD49Regulator   md49_regulator(0.0, 200.0, 0.0, 200.0, T_LOOP_UPDATE_s);
 
@@ -101,6 +101,7 @@ int main(int argc, char **argv)
                               delta_encoder_2,
                               actual_speed_1_m_per_s,
                               actual_speed_2_m_per_s);
+
     md49_regulator.updateWithActualValue(actual_speed_1_m_per_s, actual_speed_2_m_per_s);
 
     int8_t speed_1 = 0,
