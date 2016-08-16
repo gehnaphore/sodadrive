@@ -26,11 +26,9 @@
 
 typedef struct
 {
-  double linear_x_m_per_s_target_value;
-  double angular_z_deg_per_s_target_value;
-  double actual_speed_1_m_per_s;
-  double actual_speed_2_m_per_s;
-} sDifferentialDriveControllerInputData;
+  double speed_1_m_per_s;
+  double speed_2_m_per_s;
+} ActualSpeed;
 
 /**************************************************************************************
  * GLOBAL CONSTANTS
@@ -39,11 +37,16 @@ typedef struct
 static double const T_LOOP_UPDATE_s  = 0.2;   /* 200 ms */
 static double const WHEEL_DISTANCE_m = 0.5;   /* 0.5 m */
 
+static double const kP_LINEAR        = 1.0;
+static double const kI_LINEAR        = 0.0;
+static double const kP_ANGULAR       = 1.0;
+static double const kI_ANGULAR       = 0.0;
+
 /**************************************************************************************
  * GLOBAL VARIABLES
  **************************************************************************************/
 
-static sDifferentialDriveControllerInputData drive_controller_input_data = { 0.0, 0.0, 0.0, 0.0 };
+static ActualSpeed actual_speed = { 0.0, 0.0 };
 
 /**************************************************************************************
  * PROTOTYPES
@@ -51,8 +54,8 @@ static sDifferentialDriveControllerInputData drive_controller_input_data = { 0.0
 
 void actual_speed_1_callback(std_msgs::Float64::ConstPtr    const & msg);
 void actual_speed_2_callback(std_msgs::Float64::ConstPtr    const & msg);
-void cmd_vel_callback       (geometry_msgs::Twist::ConstPtr const & msg);
-void setTargetSpeed         (DifferentialDriveController          * drive_controller);
+void cmd_vel_callback       (geometry_msgs::Twist::ConstPtr const & msg,
+                             DifferentialDriveController          * drive_controller);
 void getActualSpeed         (Odometry                             & odometry,
                              double                               & linear_x_m_per_s_actual_value,
                              double                               & angular_speed_deg_per_s_actual_value);
@@ -76,8 +79,12 @@ int main(int argc, char **argv)
 
   /* Instantiate the classes */
 
-  DifferentialDriveController drive_controller(1.0, 1.0, 1.0, 1.0, T_LOOP_UPDATE_s);
-  Odometry                    odometry(WHEEL_DISTANCE_m);
+  DifferentialDriveController drive_controller(kP_LINEAR,
+                                               kI_LINEAR,
+                                               kP_ANGULAR,
+                                               kI_ANGULAR,
+                                               T_LOOP_UPDATE_s);
+  Odometry                    odometry        (WHEEL_DISTANCE_m);
 
   /* Setup the publishers */
 
@@ -89,7 +96,7 @@ int main(int argc, char **argv)
   ros::Subscriber actual_speed_1_subscriber = node_handle.subscribe<std_msgs::Float64>   ("/md49/actual_speed_1", 10, actual_speed_1_callback);
   ros::Subscriber actual_speed_2_subscriber = node_handle.subscribe<std_msgs::Float64>   ("/md49/actual_speed_2", 10, actual_speed_2_callback);
 
-  ros::Subscriber cmd_vel_subscriber        = node_handle.subscribe<geometry_msgs::Twist>("/rpi/cmd_vel",         10, cmd_vel_callback       );
+  ros::Subscriber cmd_vel_subscriber        = node_handle.subscribe<geometry_msgs::Twist>("/rpi/cmd_vel",         10, boost::bind(&cmd_vel_callback, _1, &drive_controller));
 
   /* Run the control loop */
 
@@ -98,8 +105,6 @@ int main(int argc, char **argv)
   while(ros::ok())
   {
     ros::spinOnce();
-
-    setTargetSpeed        (&drive_controller);
 
     double linear_x_m_per_s_actual_value        = 0.0,
            angular_speed_deg_per_s_actual_value = 0.0;
@@ -140,30 +145,24 @@ int main(int argc, char **argv)
 
 void actual_speed_1_callback(std_msgs::Float64::ConstPtr const & msg)
 {
-  drive_controller_input_data.actual_speed_1_m_per_s = msg->data;
+  actual_speed.speed_1_m_per_s = msg->data;
 }
 
 void actual_speed_2_callback(std_msgs::Float64::ConstPtr const & msg)
 {
-  drive_controller_input_data.actual_speed_2_m_per_s = msg->data;
+  actual_speed.speed_2_m_per_s = msg->data;
 }
 
-void cmd_vel_callback(geometry_msgs::Twist::ConstPtr const & msg)
+void cmd_vel_callback(geometry_msgs::Twist::ConstPtr const & msg, DifferentialDriveController *drive_controller)
 {
-  drive_controller_input_data.linear_x_m_per_s_target_value     = msg->linear.x;
-  drive_controller_input_data.angular_z_deg_per_s_target_value  = msg->angular.z;
-}
-
-void setTargetSpeed(DifferentialDriveController *drive_controller)
-{
-  drive_controller->setLinearX (drive_controller_input_data.linear_x_m_per_s_target_value);
-  drive_controller->setAngularZ(drive_controller_input_data.angular_z_deg_per_s_target_value);
+  drive_controller->setLinearX  (msg->linear.x  );
+  drive_controller->setAngularZ (msg->angular.z );
 }
 
 void getActualSpeed(Odometry &odometry, double &linear_x_m_per_s_actual_value, double &angular_speed_deg_per_s_actual_value)
 {
-  linear_x_m_per_s_actual_value        = odometry.calcLinearSpeed (drive_controller_input_data.actual_speed_1_m_per_s, drive_controller_input_data.actual_speed_2_m_per_s);
-  angular_speed_deg_per_s_actual_value = odometry.calcAngularSpeed(drive_controller_input_data.actual_speed_1_m_per_s, drive_controller_input_data.actual_speed_2_m_per_s);
+  linear_x_m_per_s_actual_value        = odometry.calcLinearSpeed (actual_speed.speed_1_m_per_s, actual_speed.speed_2_m_per_s);
+  angular_speed_deg_per_s_actual_value = odometry.calcAngularSpeed(actual_speed.speed_1_m_per_s, actual_speed.speed_2_m_per_s);
 }
 
 void getSpeedFromRegulator(DifferentialDriveController const &drive_controller, double &speed_1_m_per_s, double &speed_2_m_per_s)

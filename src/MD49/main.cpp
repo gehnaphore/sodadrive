@@ -27,6 +27,11 @@ static size_t const MD49_BAUD_RATE   = 38400;
 static double const WHEEL_DIAMETER_m = 0.125;
 static double const T_LOOP_UPDATE_s  = 0.1;    /* 100 ms */
 
+static double const kP_speed_1       = 0.0;
+static double const kI_speed_1       = 200.0;
+static double const kP_speed_2       = kP_speed_1;
+static double const kI_speed_2       = kI_speed_1;
+
 /**************************************************************************************
  * PROTOTYPES
  **************************************************************************************/
@@ -69,7 +74,11 @@ int main(int argc, char **argv)
   ros::NodeHandle node_handle;
   Serial          serial        ("/dev/ttyUSB0", MD49_BAUD_RATE, true);
   MD49            md49          (serial);
-  MD49Regulator   md49_regulator(0.0, 200.0, 0.0, 200.0, T_LOOP_UPDATE_s);
+  MD49Regulator   md49_regulator(kP_speed_1,
+                                 kI_speed_1,
+                                 kP_speed_2,
+                                 kI_speed_2,
+                                 T_LOOP_UPDATE_s);
 
   /* Setup subscribers */
 
