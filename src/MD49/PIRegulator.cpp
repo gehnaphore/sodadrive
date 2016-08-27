@@ -32,7 +32,12 @@ double PIRegulator::calc(double const target_value, double const actual_value)
 
   double const p_out = _kP * error;
 
-  _integral += error * _dt_s;
+  double const integral = _integral + error * _dt_s;
+  if(integral >= _min && integral <= _max)
+  {
+    _integral = integral;
+  }
+  
   double const i_out = _kI * _integral;
 
   double out = p_out + i_out;
