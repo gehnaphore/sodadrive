@@ -34,12 +34,12 @@ typedef struct
  * GLOBAL CONSTANTS
  **************************************************************************************/
 
-static double const T_LOOP_UPDATE_s  = 0.2;   /* 200 ms */
-static double const WHEEL_DISTANCE_m = 0.5;   /* 0.5 m */
+static double const T_LOOP_UPDATE_s  = 0.25;  /* 250  ms */
+static double const WHEEL_DISTANCE_m = 0.34;  /* 0.34 m  */
 
-static double const kP_LINEAR        = 1.0;
+static double const kP_LINEAR        = 0.5;
 static double const kI_LINEAR        = 0.0;
-static double const kP_ANGULAR       = 1.0;
+static double const kP_ANGULAR       = 0.5;
 static double const kI_ANGULAR       = 0.0;
 
 /**************************************************************************************
@@ -179,5 +179,5 @@ void publishSpeed(ros::Publisher &speed_1_publisher, double const speed_1_m_per_
 
   std_msgs::Float64 speed_2_msg;
   speed_2_msg.data = speed_2_m_per_s;
-  speed_1_publisher.publish(speed_2_msg);
+  speed_2_publisher.publish(speed_2_msg);
 }
