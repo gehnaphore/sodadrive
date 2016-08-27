@@ -34,13 +34,13 @@ typedef struct
  * GLOBAL CONSTANTS
  **************************************************************************************/
 
-static double const T_LOOP_UPDATE_s  = 0.25;  /* 250  ms */
+static double const T_LOOP_UPDATE_s  = 0.10;  /* 100  ms */
 static double const WHEEL_DISTANCE_m = 0.34;  /* 0.34 m  */
 
-static double const kP_LINEAR        = 0.5;
-static double const kI_LINEAR        = 0.0;
-static double const kP_ANGULAR       = 0.5;
-static double const kI_ANGULAR       = 0.0;
+static double const kP_LINEAR        = 0.50;
+static double const kI_LINEAR        = 1.00;
+static double const kP_ANGULAR       = 0.00;
+static double const kI_ANGULAR       = 0.01;
 
 /**************************************************************************************
  * GLOBAL VARIABLES
@@ -116,6 +116,9 @@ int main(int argc, char **argv)
     drive_controller.updateWithActualValue
                           (linear_x_m_per_s_actual_value,
                            angular_speed_deg_per_s_actual_value);
+
+    std::cout << "LINEAR = " << linear_x_m_per_s_actual_value << " | "
+              << "ANGULAR = " << angular_speed_deg_per_s_actual_value << std::endl; 
 
     double speed_1_m_per_s = 0.0,
            speed_2_m_per_s = 0.0;

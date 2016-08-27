@@ -42,8 +42,8 @@ void DifferentialDriveController::updateWithActualValue(double const linear_x_m_
   double const linear_x_regulator_out   = _linear_x_regulator.calc  (_linear_x_m_per_s_target_value,    linear_x_m_per_s_actual_value   );
   double const angular_z_regulator_out  = _angular_z_regulator.calc (_angular_z_deg_per_s_target_value, angular_z_deg_per_s_actual_value);
 
-  _speed_1_m_per_s = linear_x_regulator_out + angular_z_regulator_out;
-  _speed_2_m_per_s = linear_x_regulator_out - angular_z_regulator_out;
+  _speed_1_m_per_s = linear_x_regulator_out - angular_z_regulator_out;
+  _speed_2_m_per_s = linear_x_regulator_out + angular_z_regulator_out;
 }
 
 double DifferentialDriveController::getSpeed_1_m_per_s() const

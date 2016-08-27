@@ -47,8 +47,8 @@ private:
 
   static double const LINEAR_X_MIN_SPEED_m_per_s    =  -1.0;
   static double const LINEAR_X_MAX_SPEED_m_per_s    =   1.0;
-  static double const ANGULAR_X_MIN_SPEED_deg_per_s = -20.0;
-  static double const ANGULAR_X_MAX_SPEED_deg_per_s =  20.0;
+  static double const ANGULAR_X_MIN_SPEED_deg_per_s = -25.0;
+  static double const ANGULAR_X_MAX_SPEED_deg_per_s =  25.0;
 
 };
 

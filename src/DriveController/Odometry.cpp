@@ -30,7 +30,7 @@ double Odometry::calcLinearSpeed(double const speed_left_m_per_s, double const s
 
 double Odometry::calcAngularSpeed (double const speed_left_m_per_s, double const speed_right_m_per_s)
 {
-  double const angular_speed_rad_per_s = (speed_left_m_per_s + speed_right_m_per_s) / _wheel_distance_m;
+  double const angular_speed_rad_per_s = (speed_right_m_per_s - speed_left_m_per_s) / _wheel_distance_m;
   double const angular_speed_deg_per_s = angular_speed_rad_per_s * 180.0 / M_PI;
   return angular_speed_deg_per_s;
 }
