@@ -3,31 +3,31 @@
  * \copyright LXRobotics GmbH
  */
 
-#ifndef RPI_SRC_MD49_PIREGULATOR_H_
-#define RPI_SRC_MD49_PIREGULATOR_H_
+#ifndef RPI_SRC_WHEEL_CONTROLLER_EMG49_H_
+#define RPI_SRC_WHEEL_CONTROLLER_EMG49_H_
 
 /**************************************************************************************
  * INCLUDES
  **************************************************************************************/
 
+#include <stdint.h>
+
 /**************************************************************************************
  * CLASS DECLARATION
  **************************************************************************************/
 
-class PIRegulator
+class EMG49
 {
 
 public:
 
-  PIRegulator(double const kP, double const kI, double const dt_s, double const min, double const max);
-
-  double calc(double const target_value, double const actual_value);
+  static double calcDistanceTraveled_m(int32_t const delta_encoder_ticks, double const wheel_diameter_m);
 
 private:
 
-  double _kP, _kI, _dt_s, _min, _max,
-         _integral;
+  EMG49() { }
+  EMG49(EMG49 const &other) { }
 
 };
 
-#endif /* RPI_SRC_MD49_PIREGULATOR_H_ */
+#endif /* RPI_SRC_WHEEL_CONTROLLER_EMG49_H_ */

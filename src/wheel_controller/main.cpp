@@ -47,7 +47,7 @@ void publishActualSpeed    (ros::Publisher&      actual_speed_1_publisher,
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "md49_node");
+  ros::init(argc, argv, "wheel_controller_node");
 
   /* Instantiate all classes */
 

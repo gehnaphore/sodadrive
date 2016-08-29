@@ -3,8 +3,8 @@
  * \copyright LXRobotics GmbH
  */
 
-#ifndef RPI_SRC_MD49_WHEELCONTROLLER_H_
-#define RPI_SRC_MD49_WHEELCONTROLLER_H_
+#ifndef RPI_SRC_WHEEL_CONTROLLER_WHEELCONTROLLER_H_
+#define RPI_SRC_WHEEL_CONTROLLER_WHEELCONTROLLER_H_
 
 /**************************************************************************************
  * INCLUDES
@@ -64,4 +64,4 @@ private:
                                  double        & actual_speed_2_m_per_s);
 };
 
-#endif /* RPI_SRC_MD49_WHEELCONTROLLER_H_ */
+#endif /* RPI_SRC_WHEEL_CONTROLLER_WHEELCONTROLLER_H_ */

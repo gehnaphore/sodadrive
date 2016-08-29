@@ -3,8 +3,8 @@
  * \copyright LXRobotics GmbH
  */
 
-#ifndef RPI_SRC_MD49_MD49MESSAGE_H_
-#define RPI_SRC_MD49_MD49MESSAGE_H_
+#ifndef RPI_SRC_WHEEL_CONTROLLER_MD49MESSAGE_H_
+#define RPI_SRC_WHEEL_CONTROLLER_MD49MESSAGE_H_
 
 /**************************************************************************************
  * INCLUDES
@@ -27,4 +27,4 @@ typedef std::vector<uint8_t> MD49Message;
 
 std::ostream & operator << (std::ostream &os, MD49Message const &msg);
 
-#endif /* RPI_SRC_MD49_MD49MESSAGE_H_ */
+#endif /* RPI_SRC_WHEEL_CONTROLLER_MD49MESSAGE_H_ */

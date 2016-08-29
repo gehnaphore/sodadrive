@@ -3,8 +3,8 @@
  * \copyright LXRobotics GmbH
  */
 
-#ifndef RPI_SRC_MD49_MD49_H_
-#define RPI_SRC_MD49_MD49_H_
+#ifndef RPI_SRC_WHEEL_CONTROLLER_MD49_H_
+#define RPI_SRC_WHEEL_CONTROLLER_MD49_H_
 
 /**************************************************************************************
  * INCLUDES
@@ -47,4 +47,4 @@ private:
 };
 
 
-#endif /* RPI_SRC_MD49_MD49_H_ */
+#endif /* RPI_SRC_WHEEL_CONTROLLER_MD49_H_ */
