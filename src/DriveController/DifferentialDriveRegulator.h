@@ -22,8 +22,8 @@ class DifferentialDriveRegulator
 public:
 
   DifferentialDriveRegulator(double const kP_1, double const kI_1,
-                              double const kP_2, double const kI_2,
-                              double const dt_s);
+                             double const kP_2, double const kI_2,
+                             double const dt_s);
 
   void    setLinearX            (double const linear_x_m_per_s_target_value   );
   void    setAngularZ           (double const angular_deg_m_per_s_target_value);

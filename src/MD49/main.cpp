@@ -28,7 +28,7 @@ static size_t const MD49_BAUD_RATE   = 38400;
  * GLOBAL VARIABLES
  **************************************************************************************/
 
-WheelController::sIn wheel_controller_in;
+WheelController::sIn wheel_controller_in = {0.0, 0.0};
 
 /**************************************************************************************
  * PROTOTYPES
