@@ -3,8 +3,8 @@
  * \copyright LXRobotics GmbH
  */
 
-#ifndef RPI_SRC_DRIVECONTROLLER_DIFFERENTIALDRIVECONTROLLER_H_
-#define RPI_SRC_DRIVECONTROLLER_DIFFERENTIALDRIVECONTROLLER_H_
+#ifndef RPI_SRC_DRIVECONTROLLER_DIFFERENTIALDRIVEREGULATOR_H_
+#define RPI_SRC_DRIVECONTROLLER_DIFFERENTIALDRIVEREGULATOR_H_
 
 /**************************************************************************************
  * INCLUDES
@@ -16,12 +16,12 @@
  * CLASS DECLARATION
  **************************************************************************************/
 
-class DifferentialDriveController
+class DifferentialDriveRegulator
 {
 
 public:
 
-  DifferentialDriveController(double const kP_1, double const kI_1,
+  DifferentialDriveRegulator(double const kP_1, double const kI_1,
                               double const kP_2, double const kI_2,
                               double const dt_s);
 
@@ -52,4 +52,4 @@ private:
 
 };
 
-#endif /* RPI_SRC_DRIVECONTROLLER_DIFFERENTIALDRIVECONTROLLER_H_ */
+#endif /* RPI_SRC_DRIVECONTROLLER_DIFFERENTIALDRIVEREGULATOR_H_ */

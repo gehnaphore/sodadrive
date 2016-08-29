@@ -92,7 +92,7 @@ include_directories(
 
 add_executable(drive_controller_node 
   src/DriveController/main.cpp
-  src/DriveController/DifferentialDriveController.cpp
+  src/DriveController/DifferentialDriveRegulator.cpp
   src/DriveController/Odometry.cpp
   src/MD49/PIRegulator.cpp
 )
