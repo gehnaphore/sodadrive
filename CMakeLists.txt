@@ -102,11 +102,11 @@ target_link_libraries(drive_controller_node
   ${catkin_LIBRARIES}
 )
 
-add_executable(drive_controller_test 
-  src/DriveController_test/main.cpp
+add_executable(rpi_teleop_keyboard_node 
+  src/rpi_teleop_keyboard/main.cpp
 )
 
-target_link_libraries(drive_controller_test
+target_link_libraries(rpi_teleop_keyboard_node
   ${catkin_LIBRARIES}
 )
 
