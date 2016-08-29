@@ -27,7 +27,7 @@ void LoopPeriodAnalyser::update()
 
   if(!is_first_loop_run)
     {
-      boost::posix_time::time_duration const time_duration = _prev - _now;
+      boost::posix_time::time_duration const time_duration = _now - _prev;
 
       _loop_period_s = time_duration.total_milliseconds() / 1000.0;
     }
