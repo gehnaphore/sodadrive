@@ -8,6 +8,8 @@
  **************************************************************************************/
 
 #include <stdlib.h>
+#include <unistd.h>
+#include <termios.h>
 
 #include <iostream>
 
@@ -15,14 +17,25 @@
 
 #include <geometry_msgs/Twist.h>
 
+#include <boost/thread.hpp>
+
+/**************************************************************************************
+ * CONSTANTS
+ **************************************************************************************/
+
+double const LINEAR_SPEED_INCREMENT_m_per_s     = 0.02;
+double const ANGULAR_SPEED_INCREMENT_deg_per_s  = 1;
+
+double const MIN_LINEAR_SPEED_m_per_s            = -1.0;
+double const MAX_LINEAR_SPEED_m_per_s            = 1.0;
+double const MIN_ANGULAR_SPEED_m_per_s          = -20.0;
+double const MAX_ANGULAR_SPEED_m_per_s          = 20.0;
+
 /**************************************************************************************
  * PROTOTYPES
  **************************************************************************************/
 
-void handleSetLinearSpeed   (ros::Publisher &cmd_vel_publisher, double &current_linear_speed_m_per_s, double &current_angular_speed_m_per_s);
-void handleSetAngularSpeed  (ros::Publisher &cmd_vel_publisher, double &current_linear_speed_m_per_s, double &current_angular_speed_m_per_s);
-void handleExit             ();
-void handleInvalidValue     ();
+char getch();
 
 /**************************************************************************************
  * MAIN
@@ -38,29 +51,81 @@ int main(int argc, char **argv)
 
   ros::Publisher cmd_vel_publisher = node_handle.advertise<geometry_msgs::Twist>("/rpi/cmd_vel",  10);
 
-  /* Provide a crude menu for selecting which service one wants to invoke */
+  /* Select current linear and angular speed via keyboard entries */
 
-  char cmd = 0;
+  std::cout << "[w] -> increase linear speed" << std::endl;
+  std::cout << "[s] -> decrease linear speed" << std::endl;
+  std::cout << "[a] -> decrease angular speed" << std::endl;
+  std::cout << "[d] -> increase angular speed" << std::endl;
+  std::cout << "[q]uit" << std::endl;
 
   double current_linear_speed_m_per_s   = 0.0,
          current_angular_speed_m_per_s  = 0.0;
 
+  char cmd = 0;
   do
   {
-    std::cout                               << std::endl;
-    std::cout << "[1] set linear speed"     << std::endl;
-    std::cout << "[2] set angular speed"    << std::endl;
-    std::cout << "[q]uit"                   << std::endl;
-    std::cout << ">>"; std::cin >> cmd;
+    cmd = getch();
 
     switch(cmd)
     {
-    case '1': handleSetLinearSpeed   (cmd_vel_publisher, current_linear_speed_m_per_s, current_angular_speed_m_per_s);  break;
-    case '2': handleSetAngularSpeed  (cmd_vel_publisher, current_linear_speed_m_per_s, current_angular_speed_m_per_s);  break;
-    case 'q': handleExit             ();                                                                                break;
-    default:  handleInvalidValue     ();                                                                                break;
+    case 'w':
+    {
+      current_linear_speed_m_per_s += LINEAR_SPEED_INCREMENT_m_per_s;
     }
+    break;
+    case 's':
+    {
+      current_linear_speed_m_per_s -= LINEAR_SPEED_INCREMENT_m_per_s;
+    }
+    break;
+    case 'a':
+    {
+      current_angular_speed_m_per_s -= ANGULAR_SPEED_INCREMENT_deg_per_s;
+    }
+    break;
+    case 'd':
+    {
+      current_angular_speed_m_per_s += ANGULAR_SPEED_INCREMENT_deg_per_s;
+    }
+    break;
+    case 'q':
+    {
+      current_linear_speed_m_per_s  = 0.0;
+      current_angular_speed_m_per_s = 0.0;
+    }
+    break;
+    default:
+    {
+      current_linear_speed_m_per_s  = 0.0;
+      current_angular_speed_m_per_s = 0.0;
+    }
+    break;
+    }
+
+    /* Limit linear and angular speed */
+
+    current_linear_speed_m_per_s  = std::max<double>(current_linear_speed_m_per_s,  MIN_LINEAR_SPEED_m_per_s);
+    current_linear_speed_m_per_s  = std::min<double>(current_linear_speed_m_per_s,  MAX_LINEAR_SPEED_m_per_s);
+
+    current_angular_speed_m_per_s = std::max<double>(current_angular_speed_m_per_s, MIN_ANGULAR_SPEED_m_per_s);
+    current_angular_speed_m_per_s = std::min<double>(current_angular_speed_m_per_s, MAX_ANGULAR_SPEED_m_per_s);
+
+
+    /* Publish the message */
+
+    geometry_msgs::Twist msg;
+
+    msg.linear.x  = current_linear_speed_m_per_s;
+    msg.angular.z = current_angular_speed_m_per_s;
+
+    cmd_vel_publisher.publish(msg);
+
   } while(cmd != 'q');
+
+  /* Ensure that the last message is sent too */
+
+  boost::this_thread::sleep_for(boost::chrono::seconds(2));
 
   return EXIT_SUCCESS;
 }
@@ -69,38 +134,25 @@ int main(int argc, char **argv)
  * OUR FUNCTIONS
  **************************************************************************************/
 
-void handleSetLinearSpeed(ros::Publisher &cmd_vel_publisher, double &current_linear_speed_m_per_s, double &current_angular_speed_m_per_s)
+/* http://stackoverflow.com/questions/421860/capture-characters-from-standard-input-without-waiting-for-enter-to-be-pressed */
+char getch()
 {
-  std::cout << "Linear Speed (m / s) >> "; std::cin >> current_linear_speed_m_per_s;
+  char buf = 0;
+  struct termios old = { 0 };
+  if (tcgetattr(0, &old) < 0)             perror("tcsetattr()");
 
-  geometry_msgs::Twist msg;
-  msg.linear.x  = current_linear_speed_m_per_s;
-  msg.angular.z = current_angular_speed_m_per_s;
+  old.c_lflag &= ~ICANON;
+  old.c_lflag &= ~ECHO;
+  old.c_cc[VMIN] = 1;
+  old.c_cc[VTIME] = 0;
 
-  std::cout << msg << std::endl;
+  if (tcsetattr(0, TCSANOW, &old) < 0)    perror("tcsetattr ICANON");
 
-  cmd_vel_publisher.publish(msg);
-}
+  if (read(0, &buf, 1) < 0)               perror("read()");
 
-void handleSetAngularSpeed(ros::Publisher &cmd_vel_publisher, double &current_linear_speed_m_per_s, double &current_angular_speed_m_per_s)
-{
-  std::cout << "Angular Speed (deg / s) >> "; std::cin >> current_angular_speed_m_per_s;
+  old.c_lflag |= ICANON;
+  old.c_lflag |= ECHO;
 
-  geometry_msgs::Twist msg;
-  msg.linear.x  = current_linear_speed_m_per_s;
-  msg.angular.z = current_angular_speed_m_per_s;
-
-  std::cout << msg << std::endl;
-
-  cmd_vel_publisher.publish(msg);
-}
-
-void handleExit()
-{
-  std::cout << "Exiting node drive_controller_test" << std::endl;
-}
-
-void handleInvalidValue()
-{
-  std::cout << "Invalid input value" << std::endl;
+  if (tcsetattr(0, TCSADRAIN, &old) < 0)  perror("tcsetattr ~ICANON");
+  return (buf);
 }
