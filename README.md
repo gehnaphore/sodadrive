@@ -1,13 +1,13 @@
-# rpi
+# Robot PenguIn
 
 ## Configuration
 
 ### Login
 
-*User:* pi
-*Pass:* raspberry
+**User:** pi
+**Pass:** raspberry
 
-## WiFi/WLAN
+### Setup WiFi/WLAN
 
 * Scan for available WiFi networks
 ```
