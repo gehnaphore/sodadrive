@@ -15,6 +15,7 @@
 #include <string>
 
 #include "MD49.h"
+#include "LoopPeriodAnalyser.h"
 #include "WheelSpeedRegulator.h"
 
 /**************************************************************************************
@@ -51,11 +52,14 @@ private:
   WheelSpeedRegulator   _speed_1_regulator;
   WheelSpeedRegulator   _speed_2_regulator;
 
+  LoopPeriodAnalyser    _loop_period_analyser;
+
   void getDeltaEncoderValues    (int32_t      & delta_encoder_1,
                                  int32_t      & delta_encoder_2);
 
   void calcActualSpeed_m_per_s  (int32_t const   delta_encoder_1,
                                  int32_t const   delta_encoder_2,
+                                 double  const   loop_durations_s,
                                  double        & actual_speed_1_m_per_s,
                                  double        & actual_speed_2_m_per_s);
 };

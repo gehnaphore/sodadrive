@@ -112,6 +112,7 @@ target_link_libraries(drive_controller_test
 
 add_executable(md49_node 
   src/MD49/EMG49.cpp
+  src/MD49/LoopPeriodAnalyser.cpp
   src/MD49/main.cpp
   src/MD49/MD49.cpp
   src/MD49/MD49Message.cpp

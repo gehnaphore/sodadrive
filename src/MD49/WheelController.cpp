@@ -50,11 +50,14 @@ void WheelController::run(sIn const &in, sOut *out)
   getDeltaEncoderValues     (delta_encoder_1,
                              delta_encoder_2);
 
+  _loop_period_analyser.update();
+
   double actual_speed_1_m_per_s = 0.0,
          actual_speed_2_m_per_s = 0.0;
 
   calcActualSpeed_m_per_s   (delta_encoder_1,
                              delta_encoder_2,
+                             _loop_period_analyser.getLoopPeriodInSec(),
                              actual_speed_1_m_per_s,
                              actual_speed_2_m_per_s);
 
@@ -95,9 +98,10 @@ void WheelController::getDeltaEncoderValues(int32_t & delta_encoder_1,
 
 void WheelController::calcActualSpeed_m_per_s(int32_t const   delta_encoder_1,
                                               int32_t const   delta_encoder_2,
+                                              double  const   loop_durations_s,
                                               double        & actual_speed_1_m_per_s,
                                               double        & actual_speed_2_m_per_s)
 {
-  actual_speed_1_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_1, WHEEL_DIAMETER_m) / WheelController::T_LOOP_UPDATE_s;
-  actual_speed_2_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_2, WHEEL_DIAMETER_m) / WheelController::T_LOOP_UPDATE_s;
+  actual_speed_1_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_1, WHEEL_DIAMETER_m) / loop_durations_s;
+  actual_speed_2_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_2, WHEEL_DIAMETER_m) / loop_durations_s;
 }
