@@ -3,12 +3,8 @@
  * \copyright LXRobotics GmbH
  */
 
-#ifndef RPI_SRC_DRIVECONTROLLER_ODOMETRY_H_
-#define RPI_SRC_DRIVECONTROLLER_ODOMETRY_H_
-
-/**************************************************************************************
- * INCLUDES
- **************************************************************************************/
+#ifndef RPI_SRC_DRIVE_CONTROLLER_ODOMETRY_H_
+#define RPI_SRC_DRIVE_CONTROLLER_ODOMETRY_H_
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -30,4 +26,4 @@ private:
 
 };
 
-#endif /* RPI_SRC_DRIVECONTROLLER_ODOMETRY_H_ */
+#endif /* RPI_SRC_DRIVE_CONTROLLER_ODOMETRY_H_ */

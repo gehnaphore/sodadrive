@@ -3,15 +3,15 @@
  * \copyright LXRobotics GmbH
  */
 
-#ifndef RPI_SRC_DRIVECONTROLLER_DRIVECONTROLLER_H_
-#define RPI_SRC_DRIVECONTROLLER_DRIVECONTROLLER_H_
+#ifndef RPI_SRC_DRIVE_CONTROLLER_DRIVECONTROLLER_H_
+#define RPI_SRC_DRIVE_CONTROLLER_DRIVECONTROLLER_H_
 
 /**************************************************************************************
  * INCLUDES
  **************************************************************************************/
 
-#include "Odometry.h"
 #include "DifferentialDriveRegulator.h"
+#include "Odometry.h"
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -50,4 +50,4 @@ private:
 
 };
 
-#endif /* RPI_SRC_DRIVECONTROLLER_DRIVECONTROLLER_H_ */
+#endif /* RPI_SRC_DRIVE_CONTROLLER_DRIVECONTROLLER_H_ */
