@@ -18,7 +18,7 @@
 static double const WHEEL_DISTANCE_m = 0.34;
 
 static double const kP_LINEAR        = 0.50;
-static double const kI_LINEAR        = 1.00;
+static double const kI_LINEAR        = 2.00;
 static double const kP_ANGULAR       = 0.00;
 static double const kI_ANGULAR       = 0.01;
 

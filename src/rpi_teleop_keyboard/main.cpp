@@ -27,9 +27,9 @@ double const LINEAR_SPEED_INCREMENT_m_per_s       = 0.02;
 double const ANGULAR_SPEED_INCREMENT_deg_per_s    = 1;
 
 double const MIN_LINEAR_SPEED_m_per_s             = -1.0;
-double const MAX_LINEAR_SPEED_m_per_s             = 1.0;
-double const MIN_ANGULAR_SPEED_m_per_s            = -20.0;
-double const MAX_ANGULAR_SPEED_m_per_s            = 20.0;
+double const MAX_LINEAR_SPEED_m_per_s             =  1.0;
+double const MIN_ANGULAR_SPEED_m_per_s            = -45.0;
+double const MAX_ANGULAR_SPEED_m_per_s            =  45.0;
 
 /**************************************************************************************
  * PROTOTYPES

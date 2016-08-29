@@ -35,8 +35,8 @@ int main(int argc, char **argv)
 
   /* Setup the publishers */
 
-  ros::Publisher speed_1_publisher = node_handle.advertise<std_msgs::Float64>("/md49/speed_1", 10);
-  ros::Publisher speed_2_publisher = node_handle.advertise<std_msgs::Float64>("/md49/speed_2", 10);
+  ros::Publisher speed_1_publisher = node_handle.advertise<std_msgs::Float64>("/rpi/speed_1", 10);
+  ros::Publisher speed_2_publisher = node_handle.advertise<std_msgs::Float64>("/rpi/speed_2", 10);
 
   /* Provide a crude menu for selecting which service one wants to invoke */
 

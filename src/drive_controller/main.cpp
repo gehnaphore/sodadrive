@@ -53,13 +53,13 @@ int main(int argc, char **argv)
 
   /* Setup the publishers */
 
-  ros::Publisher speed_1_publisher = node_handle.advertise<std_msgs::Float64>("/md49/speed_1", 10);
-  ros::Publisher speed_2_publisher = node_handle.advertise<std_msgs::Float64>("/md49/speed_2", 10);
+  ros::Publisher speed_1_publisher = node_handle.advertise<std_msgs::Float64>("/rpi/speed_1", 10);
+  ros::Publisher speed_2_publisher = node_handle.advertise<std_msgs::Float64>("/rpi/speed_2", 10);
 
   /* Setup the subscribers */
 
-  ros::Subscriber actual_speed_1_subscriber = node_handle.subscribe<std_msgs::Float64>   ("/md49/actual_speed_1", 10, actual_speed_1_callback);
-  ros::Subscriber actual_speed_2_subscriber = node_handle.subscribe<std_msgs::Float64>   ("/md49/actual_speed_2", 10, actual_speed_2_callback);
+  ros::Subscriber actual_speed_1_subscriber = node_handle.subscribe<std_msgs::Float64>   ("/rpi/actual_speed_1", 10, actual_speed_1_callback);
+  ros::Subscriber actual_speed_2_subscriber = node_handle.subscribe<std_msgs::Float64>   ("/rpi/actual_speed_2", 10, actual_speed_2_callback);
 
   ros::Subscriber cmd_vel_subscriber        = node_handle.subscribe<geometry_msgs::Twist>("/rpi/cmd_vel",         10, cmd_vel_callback);
 

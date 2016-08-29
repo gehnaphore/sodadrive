@@ -18,7 +18,7 @@
  **************************************************************************************/
 
 static double const kP_speed_1        = 0.0;
-static double const kI_speed_1        = 200.0;
+static double const kI_speed_1        = 500.0;
 static double const kP_speed_2        = kP_speed_1;
 static double const kI_speed_2        = kI_speed_1;
 

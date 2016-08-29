@@ -59,11 +59,11 @@ int main(int argc, char **argv)
 
   /* Setup subscribers */
 
-  ros::Subscriber speed_1_subscriber       = node_handle.subscribe<std_msgs::Float64>("/md49/speed_1",        10, speed_1_callback);
-  ros::Subscriber speed_2_subscriber       = node_handle.subscribe<std_msgs::Float64>("/md49/speed_2",        10, speed_2_callback);
+  ros::Subscriber speed_1_subscriber       = node_handle.subscribe<std_msgs::Float64>("/rpi/speed_1",        10, speed_1_callback);
+  ros::Subscriber speed_2_subscriber       = node_handle.subscribe<std_msgs::Float64>("/rpi/speed_2",        10, speed_2_callback);
 
-  ros::Publisher  actual_speed_1_publisher = node_handle.advertise<std_msgs::Float64>("/md49/actual_speed_1", 10);
-  ros::Publisher  actual_speed_2_publisher = node_handle.advertise<std_msgs::Float64>("/md49/actual_speed_2", 10);
+  ros::Publisher  actual_speed_1_publisher = node_handle.advertise<std_msgs::Float64>("/rpi/actual_speed_1", 10);
+  ros::Publisher  actual_speed_2_publisher = node_handle.advertise<std_msgs::Float64>("/rpi/actual_speed_2", 10);
 
   /* Run the control loop */
 
