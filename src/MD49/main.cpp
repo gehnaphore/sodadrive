@@ -15,47 +15,31 @@
 #include <std_msgs/Float64.h>
 
 #include "MD49.h"
-#include "EMG49.h"
 #include "Serial.h"
-#include "WheelSpeedRegulator.h"
+#include "WheelController.h"
 
 /**************************************************************************************
  * GLOBAL CONSTANTS
  **************************************************************************************/
 
 static size_t const MD49_BAUD_RATE   = 38400;
-static double const WHEEL_DIAMETER_m = 0.125;
-static double const T_LOOP_UPDATE_s  = 0.1;    /* 100 ms */
 
-static double const kP_speed_1       = 0.0;
-static double const kI_speed_1       = 200.0;
-static double const kP_speed_2       = kP_speed_1;
-static double const kI_speed_2       = kI_speed_1;
+/**************************************************************************************
+ * GLOBAL VARIABLES
+ **************************************************************************************/
+
+WheelController::sIn wheel_controller_in;
 
 /**************************************************************************************
  * PROTOTYPES
  **************************************************************************************/
 
-void speed_1_callback      (std_msgs::Float64::ConstPtr const & msg, WheelSpeedRegulator *speed_1_regulator);
-void speed_2_callback      (std_msgs::Float64::ConstPtr const & msg, WheelSpeedRegulator *speed_2_regulator);
-
-void getDeltaEncoderValues    (MD49          &      md49,
-                               int32_t       &      delta_encoder_1,
-                               int32_t       &      delta_encoder_2);
-
-void getActualSpeed_m_per_s   (int32_t       const  delta_encoder_1,
-                               int32_t       const  delta_encoder_2,
-                               double        &      actual_speed_1_m_per_s,
-                               double        &      actual_speed_2_m_per_s);
-
-void setSpeedAtMotorController(MD49          &      md49,
-                               int8_t        const  speed_1,
-                               int8_t        const  speed_2);
-
-void publishActualSpeed       (ros::Publisher&      actual_speed_1_publisher,
-                               double        const  actual_speed_1_m_per_s,
-                               ros::Publisher&      actual_speed_2_publisher,
-                               double        const  actual_speed_2_m_per_s);
+void speed_1_callback      (std_msgs::Float64::ConstPtr const & msg);
+void speed_2_callback      (std_msgs::Float64::ConstPtr const & msg);
+void publishActualSpeed    (ros::Publisher&      actual_speed_1_publisher,
+                            double        const  actual_speed_1_m_per_s,
+                            ros::Publisher&      actual_speed_2_publisher,
+                            double        const  actual_speed_2_m_per_s);
 
 /**************************************************************************************
  * MAIN
@@ -71,54 +55,32 @@ int main(int argc, char **argv)
 
   Serial                serial            ("/dev/ttyUSB0", MD49_BAUD_RATE, true);
   MD49                  md49              (serial);
-  WheelSpeedRegulator   speed_1_regulator (kP_speed_1, kI_speed_1, T_LOOP_UPDATE_s),
-                        speed_2_regulator (kP_speed_2, kI_speed_2, T_LOOP_UPDATE_s);
+  WheelController       wheel_controller  (&md49);
 
   /* Setup subscribers */
 
-  ros::Subscriber speed_1_subscriber       = node_handle.subscribe<std_msgs::Float64>("/md49/speed_1",        10, boost::bind(&speed_1_callback, _1, &speed_1_regulator));
-  ros::Subscriber speed_2_subscriber       = node_handle.subscribe<std_msgs::Float64>("/md49/speed_2",        10, boost::bind(&speed_2_callback, _1, &speed_2_regulator));
+  ros::Subscriber speed_1_subscriber       = node_handle.subscribe<std_msgs::Float64>("/md49/speed_1",        10, speed_1_callback);
+  ros::Subscriber speed_2_subscriber       = node_handle.subscribe<std_msgs::Float64>("/md49/speed_2",        10, speed_2_callback);
 
   ros::Publisher  actual_speed_1_publisher = node_handle.advertise<std_msgs::Float64>("/md49/actual_speed_1", 10);
   ros::Publisher  actual_speed_2_publisher = node_handle.advertise<std_msgs::Float64>("/md49/actual_speed_2", 10);
 
   /* Run the control loop */
 
-  ros::Rate loop_rate(1.0 / T_LOOP_UPDATE_s);
+  ros::Rate loop_rate(1.0 / WheelController::T_LOOP_UPDATE_s);
 
   while(ros::ok())
   {
     ros::spinOnce();
 
-    int32_t delta_encoder_1 = 0,
-            delta_encoder_2 = 0;
+    WheelController::sOut wheel_controller_out;
 
-    getDeltaEncoderValues    (md49,
-                              delta_encoder_1,
-                              delta_encoder_2);
-
-    double actual_speed_1_m_per_s = 0.0,
-           actual_speed_2_m_per_s = 0.0;
-
-    getActualSpeed_m_per_s   (delta_encoder_1,
-                              delta_encoder_2,
-                              actual_speed_1_m_per_s,
-                              actual_speed_2_m_per_s);
-
-    speed_1_regulator.updateWithActualValue(actual_speed_1_m_per_s);
-    speed_2_regulator.updateWithActualValue(actual_speed_2_m_per_s);
-
-    int8_t const speed_1 = speed_1_regulator.getSpeed();
-    int8_t const speed_2 = speed_2_regulator.getSpeed();
-
-    setSpeedAtMotorController(md49,
-                              speed_1,
-                              speed_2);
+    wheel_controller.run(wheel_controller_in, &wheel_controller_out);
 
     publishActualSpeed       (actual_speed_1_publisher,
-                              actual_speed_1_m_per_s,
+                              wheel_controller_out.speed_1_m_per_s_actual_value,
                               actual_speed_2_publisher,
-                              actual_speed_2_m_per_s);
+                              wheel_controller_out.speed_2_m_per_s_actual_value);
 
     ros::spinOnce();
 
@@ -132,44 +94,14 @@ int main(int argc, char **argv)
  * FUNCTIONS
  **************************************************************************************/
 
-void speed_1_callback(std_msgs::Float64::ConstPtr const & msg, WheelSpeedRegulator *speed_1_regulator)
+void speed_1_callback(std_msgs::Float64::ConstPtr const & msg)
 {
-  speed_1_regulator->setSpeedTargetValue(msg->data);
+  wheel_controller_in.speed_1_m_per_s_target_value  = msg->data;
 }
 
-void speed_2_callback(std_msgs::Float64::ConstPtr const & msg, WheelSpeedRegulator *speed_2_regulator)
+void speed_2_callback(std_msgs::Float64::ConstPtr const & msg)
 {
-  speed_2_regulator->setSpeedTargetValue(msg->data);
-}
-
-void getDeltaEncoderValues(MD49 &md49, int32_t &delta_encoder_1, int32_t &delta_encoder_2)
-{
-  static int32_t prev_encoder_1    = 0;
-  static int32_t prev_encoder_2    = 0;
-
-         int32_t current_encoder_1 = 0,
-                 current_encoder_2 = 0;
-
-  md49.getEncoders(current_encoder_1, current_encoder_2);
-
-  delta_encoder_1 = current_encoder_1 - prev_encoder_1;
-  delta_encoder_2 = current_encoder_2 - prev_encoder_2;
-
-  prev_encoder_1  = current_encoder_1;
-  prev_encoder_2  = current_encoder_2;
-}
-
-void getActualSpeed_m_per_s(int32_t const delta_encoder_1, int32_t const delta_encoder_2,
-                            double &actual_speed_1_m_per_s, double &actual_speed_2_m_per_s)
-{
-  actual_speed_1_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_1, WHEEL_DIAMETER_m) / T_LOOP_UPDATE_s;
-  actual_speed_2_m_per_s = EMG49::calcDistanceTraveled_m(delta_encoder_2, WHEEL_DIAMETER_m) / T_LOOP_UPDATE_s;
-}
-
-void setSpeedAtMotorController(MD49 &md49, int8_t const speed_1, int8_t const speed_2)
-{
-  md49.setSpeed1(speed_1);
-  md49.setSpeed2(speed_2);
+  wheel_controller_in.speed_2_m_per_s_target_value  = msg->data;
 }
 
 void publishActualSpeed(ros::Publisher &actual_speed_1_publisher, double const actual_speed_1_m_per_s,

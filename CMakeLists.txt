@@ -117,6 +117,7 @@ add_executable(md49_node
   src/MD49/MD49MessageCreator.cpp
   src/MD49/PIRegulator.cpp
   src/MD49/Serial.cpp
+  src/MD49/WheelController.cpp
   src/MD49/WheelSpeedRegulator.cpp
 )
 
