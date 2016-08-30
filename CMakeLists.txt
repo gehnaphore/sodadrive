@@ -43,6 +43,10 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+################################################
+# drive_controller                             #
+################################################
+
 add_executable(drive_controller_node 
   src/drive_controller/main.cpp
   src/drive_controller/DifferentialDriveRegulator.cpp
@@ -55,6 +59,10 @@ target_link_libraries(drive_controller_node
   ${catkin_LIBRARIES}
 )
 
+################################################
+# teleop_keyboard                              #
+################################################
+
 add_executable(teleop_keyboard_node 
   src/teleop_keyboard/main.cpp
 )
@@ -62,6 +70,10 @@ add_executable(teleop_keyboard_node
 target_link_libraries(teleop_keyboard_node
   ${catkin_LIBRARIES}
 )
+
+################################################
+# wheel_controller                             #
+################################################
 
 add_executable(wheel_controller_node 
   src/wheel_controller/EMG49.cpp
@@ -80,11 +92,15 @@ target_link_libraries(wheel_controller_node
   ${catkin_LIBRARIES}
 )
 
-add_executable(md49_test 
-  src/MD49_test/main.cpp
+################################################
+# wheel_controller_test                        #
+################################################
+
+add_executable(wheel_controller_test 
+  src/wheel_controller_test/main.cpp
 )
 
-target_link_libraries(md49_test
+target_link_libraries(wheel_controller_test
   ${catkin_LIBRARIES}
 )
 
