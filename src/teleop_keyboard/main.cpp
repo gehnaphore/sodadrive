@@ -14,6 +14,7 @@
 #include <iostream>
 
 #include <ros/ros.h>
+#include <ros/console.h>
 
 #include <geometry_msgs/Twist.h>
 
@@ -120,6 +121,10 @@ int main(int argc, char **argv)
     msg.angular.z = current_angular_speed_m_per_s;
 
     cmd_vel_publisher.publish(msg);
+
+    /* Write to stdout */
+
+    ROS_INFO("LINEAR: %f m/s\tANGULAR: %f DEG/s", msg.linear.x, msg.angular.z);
 
   } while(cmd != 'q');
 
