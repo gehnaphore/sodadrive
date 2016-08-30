@@ -43,7 +43,7 @@ char getch();
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "rpi_teleop_keyboard_node");
+  ros::init(argc, argv, "teleop_keyboard_node");
 
   ros::NodeHandle node_handle;
 
