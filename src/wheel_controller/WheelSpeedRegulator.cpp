@@ -16,7 +16,7 @@
  **************************************************************************************/
 
 WheelSpeedRegulator::WheelSpeedRegulator(double const kP, double const kI, double const dt_s)
-: _speed_regulator           (kP, kI, dt_s, std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max()),
+: _speed_regulator           (kP, kI, 0.0, dt_s, std::numeric_limits<int8_t>::min(), std::numeric_limits<int8_t>::max()),
   _speed_m_per_s_target_value(0.0),
   _speed                     (0)
 {

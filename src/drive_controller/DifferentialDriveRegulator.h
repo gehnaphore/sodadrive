@@ -21,8 +21,8 @@ class DifferentialDriveRegulator
 
 public:
 
-  DifferentialDriveRegulator(double const kP_1, double const kI_1,
-                             double const kP_2, double const kI_2,
+  DifferentialDriveRegulator(double const kP_1, double const kI_1, double const kD_1,
+                             double const kP_2, double const kI_2, double const kD_2,
                              double const dt_s);
 
   void    setLinearX            (double const linear_x_m_per_s_target_value   );

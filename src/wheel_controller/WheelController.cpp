@@ -18,11 +18,13 @@
  **************************************************************************************/
 
 static double const kP_speed_1        = 0.0;
-static double const kI_speed_1        = 250.0;
+static double const kI_speed_1        = 300.0;
 static double const kP_speed_2        = kP_speed_1;
 static double const kI_speed_2        = kI_speed_1;
 
 static double const WHEEL_DIAMETER_m  = 0.125;
+
+static double const MIN_SPEED_m_per_s = 0.03;
 
 /**************************************************************************************
  * PUBLIC MEMBER FUNCTIONS
@@ -41,9 +43,9 @@ void WheelController::run(sIn const &in, sOut *out)
 {
   assert(out != 0);
 
-  if(fabs(in.speed_1_m_per_s_target_value) >= 0.05)  _speed_1_regulator.setSpeedTargetValue(in.speed_1_m_per_s_target_value);
+  if(fabs(in.speed_1_m_per_s_target_value) >= MIN_SPEED_m_per_s)  _speed_1_regulator.setSpeedTargetValue(in.speed_1_m_per_s_target_value);
   else                                               _speed_1_regulator.setSpeedTargetValue(0.0);
-  if(fabs(in.speed_2_m_per_s_target_value) >= 0.05)  _speed_2_regulator.setSpeedTargetValue(in.speed_2_m_per_s_target_value);
+  if(fabs(in.speed_2_m_per_s_target_value) >= MIN_SPEED_m_per_s)  _speed_2_regulator.setSpeedTargetValue(in.speed_2_m_per_s_target_value);
   else                                               _speed_2_regulator.setSpeedTargetValue(0.0);
 
   int32_t delta_encoder_1 = 0,

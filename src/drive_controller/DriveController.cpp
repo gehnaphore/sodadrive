@@ -17,10 +17,12 @@
 
 static double const WHEEL_DISTANCE_m = 0.34;
 
-static double const kP_LINEAR        = 0.50;
-static double const kI_LINEAR        = 2.00;
-static double const kP_ANGULAR       = 0.00;
-static double const kI_ANGULAR       = 0.01;
+static double const kP_LINEAR        = 0.750;
+static double const kI_LINEAR        = 1.500;
+static double const kD_LINEAR        = 0.000;
+static double const kP_ANGULAR       = 0.000;
+static double const kI_ANGULAR       = 0.003;
+static double const kD_ANGULAR       = 0.000;
 
 /**************************************************************************************
  * PUBLIC MEMBER FUNCTIONS
@@ -31,8 +33,10 @@ DriveController::DriveController()
     _odometry(WHEEL_DISTANCE_m),
     _differential_drive_regulator(kP_LINEAR,
                                   kI_LINEAR,
+                                  kD_LINEAR,
                                   kP_ANGULAR,
                                   kI_ANGULAR,
+                                  kD_ANGULAR,
                                   T_LOOP_UPDATE_s)
 {
 

@@ -29,8 +29,8 @@ double const ANGULAR_SPEED_INCREMENT_deg_per_s    = 10;
 
 double const MIN_LINEAR_SPEED_m_per_s             = -1.0;
 double const MAX_LINEAR_SPEED_m_per_s             =  1.0;
-double const MIN_ANGULAR_SPEED_m_per_s            = -180.0;
-double const MAX_ANGULAR_SPEED_m_per_s            =  180.0;
+double const MIN_ANGULAR_SPEED_deg_per_s          = -180.0;
+double const MAX_ANGULAR_SPEED_deg_per_s          =  180.0;
 
 /**************************************************************************************
  * PROTOTYPES
@@ -60,8 +60,8 @@ int main(int argc, char **argv)
   std::cout << "[d] -> decrease angular speed" << std::endl;
   std::cout << "[q]uit" << std::endl;
 
-  double current_linear_speed_m_per_s   = 0.0,
-         current_angular_speed_m_per_s  = 0.0;
+  double current_linear_speed_m_per_s    = 0.0,
+         current_angular_speed_deg_per_s = 0.0;
 
   char cmd = 0;
   do
@@ -72,45 +72,47 @@ int main(int argc, char **argv)
     {
     case 'w':
     {
-      current_linear_speed_m_per_s += LINEAR_SPEED_INCREMENT_m_per_s;
+      current_linear_speed_m_per_s   += LINEAR_SPEED_INCREMENT_m_per_s;
+      current_angular_speed_deg_per_s = 0.0;
     }
     break;
     case 's':
     {
-      current_linear_speed_m_per_s -= LINEAR_SPEED_INCREMENT_m_per_s;
+      current_linear_speed_m_per_s   -= LINEAR_SPEED_INCREMENT_m_per_s;
+      current_angular_speed_deg_per_s = 0.0;
     }
     break;
     case 'a':
     {
-      current_angular_speed_m_per_s += ANGULAR_SPEED_INCREMENT_deg_per_s;
+      current_angular_speed_deg_per_s += ANGULAR_SPEED_INCREMENT_deg_per_s;
     }
     break;
     case 'd':
     {
-      current_angular_speed_m_per_s -= ANGULAR_SPEED_INCREMENT_deg_per_s;
+      current_angular_speed_deg_per_s -= ANGULAR_SPEED_INCREMENT_deg_per_s;
     }
     break;
     case 'q':
     {
-      current_linear_speed_m_per_s  = 0.0;
-      current_angular_speed_m_per_s = 0.0;
+      current_linear_speed_m_per_s    = 0.0;
+      current_angular_speed_deg_per_s = 0.0;
     }
     break;
     default:
     {
-      current_linear_speed_m_per_s  = 0.0;
-      current_angular_speed_m_per_s = 0.0;
+      current_linear_speed_m_per_s    = 0.0;
+      current_angular_speed_deg_per_s = 0.0;
     }
     break;
     }
 
     /* Limit linear and angular speed */
 
-    current_linear_speed_m_per_s  = std::max<double>(current_linear_speed_m_per_s,  MIN_LINEAR_SPEED_m_per_s);
-    current_linear_speed_m_per_s  = std::min<double>(current_linear_speed_m_per_s,  MAX_LINEAR_SPEED_m_per_s);
+    current_linear_speed_m_per_s    = std::max<double>(current_linear_speed_m_per_s,    MIN_LINEAR_SPEED_m_per_s);
+    current_linear_speed_m_per_s    = std::min<double>(current_linear_speed_m_per_s,    MAX_LINEAR_SPEED_m_per_s);
 
-    current_angular_speed_m_per_s = std::max<double>(current_angular_speed_m_per_s, MIN_ANGULAR_SPEED_m_per_s);
-    current_angular_speed_m_per_s = std::min<double>(current_angular_speed_m_per_s, MAX_ANGULAR_SPEED_m_per_s);
+    current_angular_speed_deg_per_s = std::max<double>(current_angular_speed_deg_per_s, MIN_ANGULAR_SPEED_deg_per_s);
+    current_angular_speed_deg_per_s = std::min<double>(current_angular_speed_deg_per_s, MAX_ANGULAR_SPEED_deg_per_s);
 
 
     /* Publish the message */
@@ -118,7 +120,7 @@ int main(int argc, char **argv)
     geometry_msgs::Twist msg;
 
     msg.linear.x  = current_linear_speed_m_per_s;
-    msg.angular.z = current_angular_speed_m_per_s;
+    msg.angular.z = current_angular_speed_deg_per_s;
 
     cmd_vel_publisher.publish(msg);
 

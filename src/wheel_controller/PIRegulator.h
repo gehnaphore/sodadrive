@@ -15,14 +15,15 @@ class PIRegulator
 
 public:
 
-  PIRegulator(double const kP, double const kI, double const dt_s, double const min, double const max);
+  PIRegulator(double const kP, double const kI, double const kD, double const dt_s, double const min, double const max);
 
   double calc(double const target_value, double const actual_value);
 
 private:
 
-  double _kP, _kI, _dt_s, _min, _max,
-         _integral;
+  double _kP, _kI, _kD, _dt_s, _min, _max,
+         _integral,
+         _error_prev;
 
 };
 
