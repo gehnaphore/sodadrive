@@ -27,7 +27,7 @@ class WheelController
 
 public:
 
-  static double const T_LOOP_UPDATE_s  = 0.025;
+  static double const T_LOOP_UPDATE_s  = 0.05;
 
   WheelController(MD49 *md49);
 

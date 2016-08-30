@@ -25,12 +25,12 @@
  **************************************************************************************/
 
 double const LINEAR_SPEED_INCREMENT_m_per_s       = 0.02;
-double const ANGULAR_SPEED_INCREMENT_deg_per_s    = 1;
+double const ANGULAR_SPEED_INCREMENT_deg_per_s    = 10;
 
 double const MIN_LINEAR_SPEED_m_per_s             = -1.0;
 double const MAX_LINEAR_SPEED_m_per_s             =  1.0;
-double const MIN_ANGULAR_SPEED_m_per_s            = -45.0;
-double const MAX_ANGULAR_SPEED_m_per_s            =  45.0;
+double const MIN_ANGULAR_SPEED_m_per_s            = -180.0;
+double const MAX_ANGULAR_SPEED_m_per_s            =  180.0;
 
 /**************************************************************************************
  * PROTOTYPES
@@ -56,8 +56,8 @@ int main(int argc, char **argv)
 
   std::cout << "[w] -> increase linear speed" << std::endl;
   std::cout << "[s] -> decrease linear speed" << std::endl;
-  std::cout << "[a] -> decrease angular speed" << std::endl;
-  std::cout << "[d] -> increase angular speed" << std::endl;
+  std::cout << "[a] -> increase angular speed" << std::endl;
+  std::cout << "[d] -> decrease angular speed" << std::endl;
   std::cout << "[q]uit" << std::endl;
 
   double current_linear_speed_m_per_s   = 0.0,
@@ -82,12 +82,12 @@ int main(int argc, char **argv)
     break;
     case 'a':
     {
-      current_angular_speed_m_per_s -= ANGULAR_SPEED_INCREMENT_deg_per_s;
+      current_angular_speed_m_per_s += ANGULAR_SPEED_INCREMENT_deg_per_s;
     }
     break;
     case 'd':
     {
-      current_angular_speed_m_per_s += ANGULAR_SPEED_INCREMENT_deg_per_s;
+      current_angular_speed_m_per_s -= ANGULAR_SPEED_INCREMENT_deg_per_s;
     }
     break;
     case 'q':

@@ -18,7 +18,7 @@
  **************************************************************************************/
 
 static double const kP_speed_1        = 0.0;
-static double const kI_speed_1        = 500.0;
+static double const kI_speed_1        = 250.0;
 static double const kP_speed_2        = kP_speed_1;
 static double const kI_speed_2        = kI_speed_1;
 
@@ -41,8 +41,10 @@ void WheelController::run(sIn const &in, sOut *out)
 {
   assert(out != 0);
 
-  _speed_1_regulator.setSpeedTargetValue(in.speed_1_m_per_s_target_value);
-  _speed_2_regulator.setSpeedTargetValue(in.speed_2_m_per_s_target_value);
+  if(fabs(in.speed_1_m_per_s_target_value) >= 0.05)  _speed_1_regulator.setSpeedTargetValue(in.speed_1_m_per_s_target_value);
+  else                                               _speed_1_regulator.setSpeedTargetValue(0.0);
+  if(fabs(in.speed_2_m_per_s_target_value) >= 0.05)  _speed_2_regulator.setSpeedTargetValue(in.speed_2_m_per_s_target_value);
+  else                                               _speed_2_regulator.setSpeedTargetValue(0.0);
 
   int32_t delta_encoder_1 = 0,
           delta_encoder_2 = 0;
