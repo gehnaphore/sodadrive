@@ -52,7 +52,7 @@ add_executable(drive_controller_node
   src/drive_controller/DifferentialDriveRegulator.cpp
   src/drive_controller/DriveController.cpp
   src/drive_controller/Odometry.cpp
-  src/wheel_controller/PIRegulator.cpp
+  src/wheel_controller/PIDRegulator.cpp
 )
 
 target_link_libraries(drive_controller_node
@@ -82,7 +82,7 @@ add_executable(wheel_controller_node
   src/wheel_controller/MD49.cpp
   src/wheel_controller/MD49Message.cpp
   src/wheel_controller/MD49MessageCreator.cpp
-  src/wheel_controller/PIRegulator.cpp
+  src/wheel_controller/PIDRegulator.cpp
   src/wheel_controller/Serial.cpp
   src/wheel_controller/WheelController.cpp
   src/wheel_controller/WheelSpeedRegulator.cpp

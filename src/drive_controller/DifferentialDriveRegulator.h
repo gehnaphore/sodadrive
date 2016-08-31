@@ -10,7 +10,7 @@
  * INCLUDES
  **************************************************************************************/
 
-#include "../wheel_controller/PIRegulator.h"
+#include "../wheel_controller/PIDRegulator.h"
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -36,14 +36,14 @@ public:
 
 private:
 
-  PIRegulator _linear_x_regulator,
-              _angular_z_regulator;
+  PIDRegulator  _linear_x_regulator,
+                _angular_z_regulator;
 
-  double      _linear_x_m_per_s_target_value,
-              _angular_z_deg_per_s_target_value;
+  double        _linear_x_m_per_s_target_value,
+                _angular_z_deg_per_s_target_value;
 
-  double      _speed_1_m_per_s,
-              _speed_2_m_per_s;
+  double        _speed_1_m_per_s,
+                _speed_2_m_per_s;
 
   static double const LINEAR_X_MIN_SPEED_m_per_s    =  -1.0;
   static double const LINEAR_X_MAX_SPEED_m_per_s    =   1.0;

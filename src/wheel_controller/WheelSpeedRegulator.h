@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 
-#include "PIRegulator.h"
+#include "PIDRegulator.h"
 
 /**************************************************************************************
  * CLASS DECLARATION
@@ -23,7 +23,7 @@ class WheelSpeedRegulator
 
 public:
 
-  WheelSpeedRegulator           (double const kP, double const kI, double const dt_s);
+  WheelSpeedRegulator           (double const kP, double const kI, double const kD, double const dt_s);
 
   void    setSpeedTargetValue   (double const speed_m_per_s );
   void    updateWithActualValue (double const speed_m_per_s );
@@ -31,7 +31,7 @@ public:
 
 private:
 
-  PIRegulator   _speed_regulator;
+  PIDRegulator  _speed_regulator;
   double        _speed_m_per_s_target_value;
   int8_t        _speed;
 

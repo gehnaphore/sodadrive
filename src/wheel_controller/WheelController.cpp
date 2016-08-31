@@ -19,8 +19,10 @@
 
 static double const kP_speed_1        = 0.0;
 static double const kI_speed_1        = 300.0;
+static double const kD_speed_1        = 0.0;
 static double const kP_speed_2        = kP_speed_1;
 static double const kI_speed_2        = kI_speed_1;
+static double const kD_speed_2        = kD_speed_1;
 
 static double const WHEEL_DIAMETER_m  = 0.125;
 
@@ -33,8 +35,8 @@ static double const MIN_SPEED_m_per_s = 0.03;
 WheelController::WheelController(MD49 *md49)
 :
   _md49(md49),
-  _speed_1_regulator (kP_speed_1, kI_speed_1, T_LOOP_UPDATE_s),
-  _speed_2_regulator (kP_speed_2, kI_speed_2, T_LOOP_UPDATE_s)
+  _speed_1_regulator (kP_speed_1, kI_speed_1, kD_speed_1, T_LOOP_UPDATE_s),
+  _speed_2_regulator (kP_speed_2, kI_speed_2, kD_speed_2, T_LOOP_UPDATE_s)
 {
   assert(_md49 != 0);
 }

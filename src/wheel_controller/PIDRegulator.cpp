@@ -7,7 +7,7 @@
  * INCLUDES
  **************************************************************************************/
 
-#include "PIRegulator.h"
+#include "PIDRegulator.h"
 
 #include <algorithm>
 
@@ -15,32 +15,32 @@
  * CLASS DECLARATION
  **************************************************************************************/
 
-PIRegulator::PIRegulator(double const kP, double const kI, double const kD, double const dt_s, double const min, double const max)
+PIDRegulator::PIDRegulator(double const kP, double const kI, double const kD, double const dt_s, double const min, double const max)
 : _kP(kP),
   _kI(kI),
   _kD(kD),
   _dt_s(dt_s),
   _min(min),
   _max(max),
-  _integral(0.0),
+  _error_sum(0.0),
   _error_prev(0.0)
 {
 
 }
 
-double PIRegulator::calc(double const target_value, double const actual_value)
+double PIDRegulator::calc(double const target_value, double const actual_value)
 {
   double const error = target_value - actual_value;
 
   double const p_out = _kP * error;
 
-  double const integral = _integral + error * _dt_s;
-  if(integral >= _min && integral <= _max)
+  double const error_sum = _error_sum + error * _dt_s;
+  if(error_sum >= _min && error_sum <= _max)
   {
-    _integral = integral;
+    _error_sum = error_sum;
   }
   
-  double const i_out = _kI * _integral;
+  double const i_out = _kI * _error_sum;
 
   double const d_out = _kD * (_error_prev - error);
 
