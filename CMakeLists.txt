@@ -84,6 +84,7 @@ add_executable(wheel_controller_node
   src/wheel_controller/MD49MessageCreator.cpp
   src/wheel_controller/PIDRegulator.cpp
   src/wheel_controller/Serial.cpp
+  src/wheel_controller/VelocityTrackingLoop.cpp
   src/wheel_controller/WheelController.cpp
   src/wheel_controller/WheelSpeedRegulator.cpp
 )
