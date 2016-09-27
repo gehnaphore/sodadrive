@@ -44,6 +44,23 @@ include_directories(
 )
 
 ################################################
+# diff_drive_controller                        #
+################################################
+
+add_executable(diff_drive_controller_node 
+  src/diff_drive_controller/main.cpp
+  src/diff_drive_controller/MD49/MD49.cpp
+  src/diff_drive_controller/MD49/MD49Message.cpp
+  src/diff_drive_controller/MD49/MD49MessageCreator.cpp
+  src/diff_drive_controller/MD49/Serial.cpp
+
+)
+
+target_link_libraries(diff_drive_controller_node
+  ${catkin_LIBRARIES}
+)
+
+################################################
 # drive_controller                             #
 ################################################
 
