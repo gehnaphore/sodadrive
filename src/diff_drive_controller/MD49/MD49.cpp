@@ -20,7 +20,7 @@ MD49::MD49(Serial &serial)
 {
   enableTimeout   (       );
   disableRegulator(       );
-  setMode         (MODE_2 );
+  setMode         (MODE_4 );
   setSpeed1       (0      );
   setSpeed2       (0      );
   resetEncoders   (       );
@@ -66,7 +66,7 @@ void MD49::enableTimeout()
 
 void MD49::disableRegulator()
 {
-  _serial.write(MD49MessageCreator::createDisableTimeoutMessage());
+  _serial.write(MD49MessageCreator::createDisableRegulatorMessage());
 }
 
 void MD49::setMode(eMD49Mode const mode)

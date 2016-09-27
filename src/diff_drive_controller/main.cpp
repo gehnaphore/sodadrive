@@ -96,9 +96,7 @@ int main(int argc, char **argv)
                                             1.0);
 
   double                target_speed_linear_m_per_s     = 0.0,
-                        target_speed_angular_deg_per_s  = 0.0,
-                        speed_1                         = 0.0,
-                        speed_2                         = 0.0;
+                        target_speed_angular_deg_per_s  = 0.0;
 
   /* Setup subscribers */
 
@@ -135,28 +133,17 @@ int main(int argc, char **argv)
     double const linear_x_regulator_out         = linear_x_regulator.calc  (target_speed_linear_m_per_s,    actual_linear_speed_m_per_s   );
     double const angular_z_regulator_out        = angular_z_regulator.calc (target_speed_angular_deg_per_s, actual_angular_speed_deg_per_s);
 
-    speed_1                                     = linear_x_regulator_out - angular_z_regulator_out;
-    speed_2                                     = linear_x_regulator_out + angular_z_regulator_out;
+    md49.setSpeed1(static_cast<int8_t>(linear_x_regulator_out   * 127.0));
+    md49.setSpeed2(static_cast<int8_t>(angular_z_regulator_out  * 127.0));
 
-    speed_1 = std::max(speed_1, -1.0);
-    speed_1 = std::min(speed_1,  1.0);
-
-    speed_2 = std::max(speed_2, -1.0);
-    speed_2 = std::min(speed_2,  1.0);
-
-    md49.setSpeed1(static_cast<int8_t>(speed_1 * 127.0));
-    md49.setSpeed2(static_cast<int8_t>(speed_2 * 127.0));
-
-    ROS_INFO("dt = %f, v_1 = %f, v_2 = %f, v_l = %f, v_a = %f, l_out = %f, a_out = %f, s_1 = %f, s_2 = %f",
+    ROS_INFO("dt = %f, v_1 = %f, v_2 = %f, v_l = %f, v_a = %f, l_out = %f, a_out = %f",
              loop_durations_s,
              actual_speed_1_m_per_s,
              actual_speed_2_m_per_s,
              actual_linear_speed_m_per_s,
              actual_angular_speed_deg_per_s,
              linear_x_regulator_out,
-             angular_z_regulator_out,
-             speed_1,
-             speed_2);
+             angular_z_regulator_out);
 
     loop_rate.sleep();
   }
