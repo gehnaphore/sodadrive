@@ -5,6 +5,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   geometry_msgs
+  tf
 )
 
 find_package(Boost REQUIRED COMPONENTS 
@@ -108,6 +109,7 @@ add_executable(wheel_controller_node
   src/wheel_controller/VelocityTrackingLoop.cpp
   src/wheel_controller/WheelController.cpp
   src/wheel_controller/WheelSpeedRegulator.cpp
+  src/wheel_controller/Odometry.cpp
 )
 
 target_link_libraries(wheel_controller_node

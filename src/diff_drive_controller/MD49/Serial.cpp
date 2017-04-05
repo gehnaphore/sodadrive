@@ -26,6 +26,7 @@ Serial::Serial(std::string const &dev_node, size_t const baud_rate, bool const s
   _serial_port.set_option(boost::asio::serial_port_base::flow_control   (boost::asio::serial_port_base::flow_control::none));
   _serial_port.set_option(boost::asio::serial_port_base::parity         (boost::asio::serial_port_base::parity::none      ));
   _serial_port.set_option(boost::asio::serial_port_base::stop_bits      (boost::asio::serial_port_base::stop_bits::one    ));
+	usleep (200000);
 }
 
 Serial::~Serial()

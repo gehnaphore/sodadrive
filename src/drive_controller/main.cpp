@@ -53,15 +53,15 @@ int main(int argc, char **argv)
 
   /* Setup the publishers */
 
-  ros::Publisher speed_1_publisher = node_handle.advertise<std_msgs::Float64>("/rpi/speed_1", 10);
-  ros::Publisher speed_2_publisher = node_handle.advertise<std_msgs::Float64>("/rpi/speed_2", 10);
+  ros::Publisher speed_1_publisher = node_handle.advertise<std_msgs::Float64>("speed_1", 10);
+  ros::Publisher speed_2_publisher = node_handle.advertise<std_msgs::Float64>("speed_2", 10);
 
   /* Setup the subscribers */
 
-  ros::Subscriber actual_speed_1_subscriber = node_handle.subscribe<std_msgs::Float64>   ("/rpi/actual_speed_1", 10, actual_speed_1_callback);
-  ros::Subscriber actual_speed_2_subscriber = node_handle.subscribe<std_msgs::Float64>   ("/rpi/actual_speed_2", 10, actual_speed_2_callback);
+  ros::Subscriber actual_speed_1_subscriber = node_handle.subscribe<std_msgs::Float64>   ("actual_speed_1", 10, actual_speed_1_callback);
+  ros::Subscriber actual_speed_2_subscriber = node_handle.subscribe<std_msgs::Float64>   ("actual_speed_2", 10, actual_speed_2_callback);
 
-  ros::Subscriber cmd_vel_subscriber        = node_handle.subscribe<geometry_msgs::Twist>("/rpi/cmd_vel",         10, cmd_vel_callback);
+  ros::Subscriber cmd_vel_subscriber        = node_handle.subscribe<geometry_msgs::Twist>("cmd_vel",         10, cmd_vel_callback);
 
   /* Run the control loop */
 
@@ -103,7 +103,7 @@ void actual_speed_2_callback(std_msgs::Float64::ConstPtr const & msg)
 void cmd_vel_callback(geometry_msgs::Twist::ConstPtr const & msg)
 {
   drive_controller_in.linear_x_m_per_s_target_value     = msg->linear.x;
-  drive_controller_in.angular_z_deg_per_s_target_value  = msg->angular.z;
+  drive_controller_in.angular_z_rad_per_s_target_value  = msg->angular.z;
 }
 
 void publishSpeed(ros::Publisher &speed_1_publisher, double const speed_1_m_per_s, ros::Publisher &speed_2_publisher, double const speed_2_m_per_s)

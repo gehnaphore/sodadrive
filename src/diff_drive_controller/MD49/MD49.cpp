@@ -18,12 +18,12 @@
 MD49::MD49(Serial &serial)
 : _serial(serial)
 {
-  enableTimeout   (       );
-  disableRegulator(       );
+//  enableTimeout   (       );
+//  disableRegulator(       );
   setMode         (MODE_4 );
-  setSpeed1       (0      );
-  setSpeed2       (0      );
-  resetEncoders   (       );
+//  setSpeed1       (0      );
+//  setSpeed2       (0      );
+//  resetEncoders   (       );
 }
 
 void MD49::setSpeed1(int8_t const speed_1)

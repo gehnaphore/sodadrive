@@ -30,7 +30,8 @@
 
 /* I/O constants */
 
-static std::string  const MD49_DEV_NODE     = "/dev/ttyUSB0";
+static std::string  const MD49_DEV_NODE     = "/dev/sodabot/md49";
+//static std::string  const MD49_DEV_NODE     = "/dev/ttyUSB0";
 static size_t       const MD49_BAUD_RATE    = 38400;
 
 /* Geometrical constants */
@@ -100,7 +101,7 @@ int main(int argc, char **argv)
 
   /* Setup subscribers */
 
-  ros::Subscriber cmd_vel_subscriber  = node_handle.subscribe<geometry_msgs::Twist>("/rpi/cmd_vel",
+  ros::Subscriber cmd_vel_subscriber  = node_handle.subscribe<geometry_msgs::Twist>("/cmd_vel",
                                                                                     10,
                                                                                     boost::bind(&cmdVelCallback, _1, &target_speed_linear_m_per_s, &target_speed_angular_deg_per_s));
 

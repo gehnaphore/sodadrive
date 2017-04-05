@@ -22,7 +22,7 @@ class DriveController
 
 public:
 
-  static double const T_LOOP_UPDATE_s  = 0.2;    /* 200 ms */
+  static double const T_LOOP_UPDATE_s  = 0.05;    /* 200 ms */
 
   DriveController();
 
@@ -31,7 +31,7 @@ public:
     float speed_1_m_per_s_actual_value;
     float speed_2_m_per_s_actual_value;
     float linear_x_m_per_s_target_value;
-    float angular_z_deg_per_s_target_value;
+    float angular_z_rad_per_s_target_value;
   } sIn;
 
   typedef struct

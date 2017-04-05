@@ -36,7 +36,9 @@ WheelController::WheelController(MD49 *md49)
 :
   _md49(md49),
   _speed_1_regulator (kP_speed_1, kI_speed_1, kD_speed_1, T_LOOP_UPDATE_s),
-  _speed_2_regulator (kP_speed_2, kI_speed_2, kD_speed_2, T_LOOP_UPDATE_s)
+  _speed_2_regulator (kP_speed_2, kI_speed_2, kD_speed_2, T_LOOP_UPDATE_s),
+  last_encoder_1(0),
+  last_encoder_2(0)  
 {
   assert(_md49 != 0);
 }
@@ -84,22 +86,25 @@ void WheelController::run(sIn const &in, sOut *out)
  * PRIVATE MEMBER FUNCTIONS
  **************************************************************************************/
 
+void WheelController::getLastEncoderValues(int32_t & encoder_1,
+                                           int32_t & encoder_2) {
+  encoder_1 = last_encoder_1;                                             
+  encoder_2 = last_encoder_2;                                             
+}
+
 void WheelController::getDeltaEncoderValues(int32_t & delta_encoder_1,
                                             int32_t & delta_encoder_2)
 {
-  static int32_t prev_encoder_1    = 0;
-  static int32_t prev_encoder_2    = 0;
-
          int32_t current_encoder_1 = 0,
                  current_encoder_2 = 0;
 
   _md49->getEncoders(current_encoder_1, current_encoder_2);
 
-  delta_encoder_1 = current_encoder_1 - prev_encoder_1;
-  delta_encoder_2 = current_encoder_2 - prev_encoder_2;
+  delta_encoder_1 = current_encoder_1 - last_encoder_1;
+  delta_encoder_2 = current_encoder_2 - last_encoder_2;
 
-  prev_encoder_1  = current_encoder_1;
-  prev_encoder_2  = current_encoder_2;
+  last_encoder_1  = current_encoder_1;
+  last_encoder_2  = current_encoder_2;
 }
 
 void WheelController::calcActualSpeed_m_per_s(int32_t const   delta_encoder_1,

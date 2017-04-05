@@ -45,12 +45,18 @@ public:
 
   void run(sIn const &in, sOut *out);
 
+  void getLastEncoderValues    (int32_t      & encoder_1,
+                                int32_t      & encoder_2);
+
+
 private:
 
   MD49                * _md49;
 
   WheelSpeedRegulator   _speed_1_regulator;
   WheelSpeedRegulator   _speed_2_regulator;
+  int32_t last_encoder_1;
+  int32_t last_encoder_2;
 
   LoopPeriodAnalyser    _loop_period_analyser;
 
