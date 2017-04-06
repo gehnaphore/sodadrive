@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(rpi)
+project(sodadrive)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -31,7 +31,7 @@ find_package(Boost REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES rpi
+#  LIBRARIES sodadrive
 #  CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
 )
@@ -42,27 +42,6 @@ catkin_package(
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
-)
-
-################################################
-# diff_drive_controller                        #
-################################################
-
-add_executable(diff_drive_controller_node 
-  src/diff_drive_controller/main.cpp
-  src/diff_drive_controller/MD49/EMG49.cpp
-  src/diff_drive_controller/MD49/MD49.cpp
-  src/diff_drive_controller/MD49/MD49Message.cpp
-  src/diff_drive_controller/MD49/MD49MessageCreator.cpp
-  src/diff_drive_controller/MD49/Serial.cpp
-  src/diff_drive_controller/Regulator/LoopPeriodAnalyser.cpp
-  src/diff_drive_controller/Regulator/Odometry.cpp
-  src/diff_drive_controller/Regulator/PIDRegulator.cpp
-
-)
-
-target_link_libraries(diff_drive_controller_node
-  ${catkin_LIBRARIES}
 )
 
 ################################################
@@ -78,18 +57,6 @@ add_executable(drive_controller_node
 )
 
 target_link_libraries(drive_controller_node
-  ${catkin_LIBRARIES}
-)
-
-################################################
-# teleop_keyboard                              #
-################################################
-
-add_executable(teleop_keyboard_node 
-  src/teleop_keyboard/main.cpp
-)
-
-target_link_libraries(teleop_keyboard_node
   ${catkin_LIBRARIES}
 )
 
@@ -113,18 +80,6 @@ add_executable(wheel_controller_node
 )
 
 target_link_libraries(wheel_controller_node
-  ${catkin_LIBRARIES}
-)
-
-################################################
-# wheel_controller_test                        #
-################################################
-
-add_executable(wheel_controller_test 
-  src/wheel_controller_test/main.cpp
-)
-
-target_link_libraries(wheel_controller_test
   ${catkin_LIBRARIES}
 )
 

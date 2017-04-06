@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
 <package>
-  <name>rpi</name>
+  <name>sodadrive</name>
   <version>0.0.1</version>
-  <description>The rpi package</description>
+  <description>Sodabot's drive train</description>
 
-  <maintainer email="cto@lxrobotics.com">Alexander Entinger</maintainer>
+  <maintainer email="geh@wayspace.com">George Hoffman</maintainer>
 
-  <license>Alexander Entinger / LXRobotics</license>
-
-  <url type="website">https://github.com/lxrobotics/rpi</url>
+  <license>BSD</license>
 
   <buildtool_depend>catkin</buildtool_depend>
 
