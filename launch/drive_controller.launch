@@ -1,4 +1,4 @@
 <launch>  
-    <node pkg="rpi" type="wheel_controller_node" output="screen"  name="wheel_controller_node"/>
-    <node pkg="rpi" type="drive_controller_node" name="drive_controller_node"/>
+    <node pkg="sodadrive" type="wheel_controller_node" output="screen"  name="wheel_controller_node"/>
+    <node pkg="sodadrive" type="drive_controller_node" output="screen"  name="drive_controller_node"/>
 </launch>   

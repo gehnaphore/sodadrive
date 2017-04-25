@@ -184,21 +184,59 @@ void pl2303_reactive_descriptor_service::start_op(
  **************************************************************************************/
 
 Serial::Serial(std::string const &dev_node, size_t const baud_rate, bool const show_debug_out)
-: _serial_port    (_io_service, dev_node),
+: _dev            (dev_node),
+  _work           (_io_service),
+  _io_thread      (boost::bind(&boost::asio::io_service::run, &_io_service)),
+  _serial_port    (_io_service),
+  deadline        (_io_service),
+  _baudRate       (baud_rate),
   _show_debug_out (show_debug_out),
   _first_read_done(false),
   _tx_msg_cnt     (0),
   _rx_msg_cnt     (0)
 {
-  _serial_port.set_option(boost::asio::serial_port_base::baud_rate      (baud_rate                                        ));
+  openPort();
+  deadline.expires_at(boost::posix_time::pos_infin);
+  checkDeadline();
+}
+
+Serial::~Serial()
+{
+}
+
+void Serial::openPort() {
+  boost::system::error_code ec;
+  _serial_port.open(_dev,ec);
+  _serial_port.set_option(boost::asio::serial_port_base::baud_rate      (_baudRate                                        ));
   _serial_port.set_option(boost::asio::serial_port_base::character_size (8                                                ));
   _serial_port.set_option(boost::asio::serial_port_base::flow_control   (boost::asio::serial_port_base::flow_control::none));
   _serial_port.set_option(boost::asio::serial_port_base::parity         (boost::asio::serial_port_base::parity::none      ));
   _serial_port.set_option(boost::asio::serial_port_base::stop_bits      (boost::asio::serial_port_base::stop_bits::one    ));
 }
 
-Serial::~Serial()
+void Serial::checkDeadline()
 {
+  // Check whether the deadline has passed. We compare the deadline against
+  // the current time since a new asynchronous operation may have moved the
+  // deadline before this actor had a chance to run.
+  if (deadline.expires_at() <= boost::asio::deadline_timer::traits_type::now())
+  {
+    // The deadline has passed. The socket is closed so that any outstanding
+    // asynchronous operations are cancelled. This allows the blocked
+    // connect(), read_line() or write_line() functions to return.
+    boost::system::error_code ignored_ec;
+    std::cout << "Timeout, reopening" << std::endl;
+    _serial_port.close();
+    openPort();
+
+
+    // There is no longer an active deadline. The expiry is set to positive
+    // infinity so that the actor takes no action until a new deadline is set.
+    deadline.expires_at(boost::posix_time::pos_infin);
+  }
+
+  // Put the actor back to sleep.
+  deadline.async_wait(boost::bind(&Serial::checkDeadline, this));
 }
 
 void Serial::write(MD49Message const &msg)
@@ -215,11 +253,15 @@ void Serial::write(MD49Message const &msg)
 MD49Message Serial::read(size_t const num_bytes)
 {
   MD49Message msg(num_bytes);
+  boost::posix_time::time_duration timeout = boost::posix_time::milliseconds(500);
 
   if (!_first_read_done) {
     _first_read_done = true;
   }
-  boost::asio::read(_serial_port, boost::asio::buffer(msg, num_bytes));
+
+  boost::system::error_code ec;
+  deadline.expires_from_now(timeout);
+  boost::asio::read(_serial_port, boost::asio::buffer(msg, num_bytes), ec);
 
   if(_show_debug_out)
   {

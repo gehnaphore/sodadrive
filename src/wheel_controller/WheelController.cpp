@@ -18,7 +18,7 @@
  **************************************************************************************/
 
 static double const kP_speed_1        = 0.0;
-static double const kI_speed_1        = 300.0;
+static double const kI_speed_1        = 150.0;
 static double const kD_speed_1        = 0.0;
 static double const kP_speed_2        = kP_speed_1;
 static double const kI_speed_2        = kI_speed_1;
@@ -72,8 +72,20 @@ void WheelController::run(sIn const &in, sOut *out)
   _speed_1_regulator.updateWithActualValue(actual_speed_1_m_per_s);
   _speed_2_regulator.updateWithActualValue(actual_speed_2_m_per_s);
 
-  int8_t const speed_1 = _speed_1_regulator.getSpeed();
-  int8_t const speed_2 = _speed_2_regulator.getSpeed();
+  int8_t  speed_1 = _speed_1_regulator.getSpeed();
+  int8_t  speed_2 = _speed_2_regulator.getSpeed();
+
+  if ((speed_1 > 0) && (speed_1 < 5)) {
+    speed_1 = 5;
+  } else if ((speed_1 < 0) && (speed_1 > -5)) {
+    speed_1 = -5;
+  }
+
+  if ((speed_2 > 0) && (speed_2 < 5)) {
+    speed_2 = 5;
+  } else if ((speed_2 < 0) && (speed_2 > -5)) {
+    speed_2 = -5;
+  }
 
   _md49->setSpeed1(speed_1);
   _md49->setSpeed2(speed_2);

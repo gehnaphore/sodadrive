@@ -49,8 +49,8 @@ private:
 
   double        _dm;
 
-  static double const LINEAR_X_MIN_SPEED_m_per_s    =  -1.0;
-  static double const LINEAR_X_MAX_SPEED_m_per_s    =   1.0;
+  static double const LINEAR_X_MIN_SPEED_m_per_s    =  -5.0;
+  static double const LINEAR_X_MAX_SPEED_m_per_s    =   5.0;
   static double const ANGULAR_X_MIN_SPEED_rad_per_s = -M_PI;
   static double const ANGULAR_X_MAX_SPEED_rad_per_s =  M_PI;
 

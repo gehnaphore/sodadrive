@@ -22,7 +22,7 @@ class DriveController
 
 public:
 
-  static double const T_LOOP_UPDATE_s  = 0.05;    /* 200 ms */
+  static double const T_LOOP_UPDATE_s  = 0.2;    /* 200 ms */
 
   DriveController();
 

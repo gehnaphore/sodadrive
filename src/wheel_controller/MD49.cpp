@@ -28,12 +28,12 @@ MD49::MD49(Serial &serial)
 
 void MD49::setSpeed1(int8_t const speed_1)
 {
-  _serial.write(MD49MessageCreator::createSetSpeed1Message(static_cast<uint8_t>(speed_1)));
+  _serial.write(MD49MessageCreator::createSetSpeed1Message(static_cast<int8_t>(speed_1)));
 }
 
 void MD49::setSpeed2(int8_t const speed_2)
 {
-  _serial.write(MD49MessageCreator::createSetSpeed2Message(static_cast<uint8_t>(speed_2)));
+  _serial.write(MD49MessageCreator::createSetSpeed2Message(static_cast<int8_t>(speed_2)));
 }
 
 void MD49::getEncoders(int32_t &encoder_1, int32_t &encoder_2)
@@ -66,7 +66,7 @@ void MD49::enableTimeout()
 
 void MD49::disableRegulator()
 {
-  _serial.write(MD49MessageCreator::createDisableTimeoutMessage());
+  _serial.write(MD49MessageCreator::createDisableRegulatorMessage());
 }
 
 void MD49::setMode(eMD49Mode const mode)

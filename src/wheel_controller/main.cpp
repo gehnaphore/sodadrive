@@ -30,7 +30,7 @@ static size_t const MD49_BAUD_RATE   = 38400;
  **************************************************************************************/
 
 WheelController::sIn wheel_controller_in = {0.0, 0.0};
-bool sReverseWheels = true;
+bool sReverseWheels = false;
 
 /**************************************************************************************
  * PROTOTYPES
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
   ros::Publisher  actual_speed_1_publisher = node_handle.advertise<std_msgs::Float64>("actual_speed_1", 10);
   ros::Publisher  actual_speed_2_publisher = node_handle.advertise<std_msgs::Float64>("actual_speed_2", 10);
 
-  /* Run the control loop */
+  /* Run the control loop */ 
 
   ros::Rate loop_rate(1.0 / WheelController::T_LOOP_UPDATE_s);
 
